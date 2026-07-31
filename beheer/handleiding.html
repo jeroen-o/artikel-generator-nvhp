@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="../fotos/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Handleiding — NVHP artikel-systeem</title>
+<title>Handleiding — NVHP artikel- en zoekersysteem</title>
 <style>
 :root{--primair:#1c3a6e;--primair-licht:#2a4d8f;--accent:#ae1932;--achtergrond:#f6f9fc;--tekst:#22304a;--zacht:#5d6b84;--lijn:#d7e0ec;--ok:#1e7e46;--fout:#b3261e}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -14,11 +14,11 @@ header{background:var(--primair);color:#fff;padding:30px 20px}
 header .wrap{padding:0}
 header .lint{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
 h1{font-size:1.5rem}
-header p{color:#c9d3e4;font-size:.9rem;margin-top:6px}
-nav{background:#fff;border-bottom:1px solid var(--lijn);padding:10px 20px;font-size:.84rem}
-nav .wrap{padding:0;display:flex;gap:16px;flex-wrap:wrap}
-nav a{color:var(--primair);text-decoration:none;font-weight:600}
-nav a:hover{text-decoration:underline}
+header p{color:#c8d6ea;font-size:.9rem;margin-top:6px}
+nav.inhoud{background:#fff;border-bottom:1px solid var(--lijn);padding:10px 20px;font-size:.84rem}
+nav.inhoud .wrap{padding:0;display:flex;gap:16px;flex-wrap:wrap}
+nav.inhoud a{color:var(--primair);text-decoration:none;font-weight:600}
+nav.inhoud a:hover{text-decoration:underline}
 main{padding:26px 0}
 section{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:24px;margin:0 20px 18px;box-shadow:0 1px 3px rgba(20,41,79,.08)}
 @media(min-width:880px){section{margin-left:auto;margin-right:auto;max-width:840px}}
@@ -27,9 +27,9 @@ h3{font-size:.95rem;color:var(--primair);margin:16px 0 6px}
 p{margin-bottom:12px}
 ol,ul{margin:0 0 12px 22px}
 li{margin-bottom:6px}
-code{font-family:ui-monospace,Consolas,monospace;font-size:.85em;background:#eef1f6;padding:1px 6px;border-radius:4px;color:var(--primair);word-break:break-all}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.85em;background:#e8eef6;padding:1px 6px;border-radius:4px;color:var(--primair);word-break:break-all}
 a{color:var(--primair)}
-.blok{background:#f8f9fc;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:6px;padding:12px 14px;margin:12px 0;font-size:.88rem}
+.blok{background:#f6f9fc;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:6px;padding:12px 14px;margin:12px 0;font-size:.88rem}
 .blok.waarschuwing{border-left-color:var(--fout)}
 .blok b:first-child{color:var(--primair)}
 table{width:100%;border-collapse:collapse;font-size:.86rem;margin:10px 0 14px}
@@ -44,123 +44,127 @@ kbd{font-family:inherit;font-size:.82em;background:var(--primair);color:#fff;pad
 <header>
   <div class="wrap">
     <span class="lint">NVHP · handleiding</span>
-    <h1>Consumentenartikelen met persoonlijk afzenderblok</h1>
-    <p>Maandelijkse werkwijze voor het publiceren van artikelen waarbij elke planner met zijn eigen link als afzender verschijnt. Ingericht op GitHub Pages: geen CMS, geen server, alleen een browser nodig.</p>
+    <h1>Artikel- en zoekersysteem</h1>
+    <p>Werkinstructie voor de beheerder: adviseurs beheren, maandelijkse consumentenartikelen publiceren met persoonlijk afzenderblok, en de plannerzoeker actueel houden. Draait volledig op GitHub Pages — geen CMS, alleen een browser nodig.</p>
   </div>
 </header>
-<nav><div class="wrap">
-  <a href="#systeem">Het systeem</a>
-  <a href="#werkwijze">Maandelijkse werkwijze</a>
-  <a href="#csv">CSV-eisen</a>
+<nav class="inhoud"><div class="wrap">
+  <a href="#systeem">Systeem</a>
+  <a href="#adviseurs">Adviseurs beheren</a>
+  <a href="#artikel">Maandartikel</a>
+  <a href="#fotos">Foto's &amp; logo's</a>
   <a href="#testen">Testchecklist</a>
-  <a href="#beheer">Beheer</a>
+  <a href="#beheer">Veelvoorkomend</a>
   <a href="#compliance">AVG &amp; compliance</a>
 </div></nav>
 <main>
 
 <section id="systeem">
 <h2>1. Het systeem in het kort</h2>
-<p>Alles draait op één GitHub-repository (<code>artikel-generator-nvhp</code>) die via GitHub Pages als website wordt geserveerd:</p>
 <table>
 <tr><th>Onderdeel</th><th>Adres</th><th>Functie</th></tr>
-<tr><td>Artikeloverzicht</td><td><code>https://jeroen-o.github.io/artikel-generator-nvhp/</code></td><td>Openbare voorpagina met alle artikelen; geeft <code>?advisor=…</code> automatisch door aan de artikellinks.</td></tr>
-<tr><td>Artikelpagina's</td><td><code>…/artikelen/2026-08-verduurzaming.html</code></td><td>Eén bestand per artikel; alle plannerdata zit erin. Met <code>?advisor=nummer</code> achter de URL verschijnt het contactblok van die planner (naam, kantoor, belknop, e-mailknop). Zonder geldig nummer: "Vind een hypothecair planner".</td></tr>
-<tr><td>Plannerzoeker</td><td><code>…/zoeker.html</code></td><td>Openbare zoekpagina: zoeken op naam, kantoor of plaats; detailpagina per planner met bel-, e-mail- en profielknop en link naar het laatste artikel. Deep link: <code>zoeker.html?advisor=nummer</code>.</td></tr>
-<tr><td>Generator</td><td><code>…/beheer/generator.html</code></td><td>Maakt van een leden-CSV + artikeltekst een nieuwe artikelpagina.</td></tr>
-<tr><td>Deellink-tool</td><td><code>…/beheer/deellinks.html</code></td><td>Maakt per planner de persoonlijke link, Facebook/LinkedIn/WhatsApp-deellinks en de vooringevulde aankondigings- en herinneringsmail.</td></tr>
-<tr><td>Deze handleiding</td><td><code>…/beheer/handleiding.html</code></td><td>Werkinstructie voor de beheerder.</td></tr>
+<tr><td>Voorpagina</td><td><code>https://jeroen-o.github.io/artikel-generator-nvhp/</code></td><td>Artikeloverzicht + link naar de zoeker; geeft <code>?advisor=…</code> door aan artikellinks.</td></tr>
+<tr><td>Plannerzoeker</td><td><code>…/zoeker.html</code></td><td>Zoeken op naam, plaats of postcode met afstandsfilter (indicatief), talenfilter, lijst- én kaartweergave. Detailpagina per planner met foto, diensten, openingstijden, bel-, WhatsApp- en e-mailknop, socials en de link naar het laatste artikel. Deep link: <code>zoeker.html?advisor=nummer</code>.</td></tr>
+<tr><td>Artikelpagina's</td><td><code>…/artikelen/…</code></td><td>Eén bestand per artikel; met <code>?advisor=nummer</code> verschijnt het afzenderblok (foto, naam, belknop, e-mail, profiel) van die planner. Zonder geldig nummer: verwijzing naar de zoeker.</td></tr>
+<tr><td><b>Adviseursbeheer</b></td><td><code>…/beheer/adviseurs.html</code></td><td>Het startpunt voor alle plannerdata: één formulier per adviseur (gegevens, adres, media, socials, SEO, openingstijden, filters) met import uit dealer_import.csv (Dutch Media Lab) en exports naar alle andere onderdelen.</td></tr>
+<tr><td>Artikel-generator</td><td><code>…/beheer/generator.html</code></td><td>Maakt van de adviseurs-CSV + artikeltekst (+ optionele afbeelding) een nieuwe artikelpagina in NVHP-stijl.</td></tr>
+<tr><td>Deellinks &amp; mails</td><td><code>…/beheer/deellinks.html</code></td><td>Per planner de persoonlijke artikellink, Facebook/LinkedIn/WhatsApp-deellinks en vooringevulde aankondigings- en herinneringsmails.</td></tr>
+<tr><td>Afbeeldingen</td><td>map <code>fotos/</code></td><td>NVHP-logo, favicon, profielfoto's, kantoorlogo's, social-iconen en artikelfoto's.</td></tr>
 </table>
-<div class="blok"><b>Voorbeeld:</b> planner 101 deelt <code>…/artikelen/2026-08-verduurzaming.html?advisor=101</code>. Iedereen die daarop klikt, ziet het artikel mét het contactblok van planner 101.</div>
+<div class="blok"><b>De datastroom:</b> Adviseursbeheer is de bron. Van daaruit exporteer je het <i>zoeker-datablok</i> (→ zoeker.html), de <i>generator-CSV</i> (→ nieuwe artikelen) en desgewenst een <i>dealer_import.csv</i> (→ terug naar hypotheekadviseurzoeker.nl). Je bewaart je werk als <i>beheerbestand (JSON)</i> op je eigen computer.</div>
 </section>
 
-<section id="werkwijze">
-<h2>2. Maandelijkse werkwijze (± 30 minuten)</h2>
-
-<h3>Stap 1 — Nieuwe artikelpagina maken</h3>
+<section id="adviseurs">
+<h2>2. Adviseurs beheren</h2>
+<p>Open <code>…/beheer/adviseurs.html</code>. Belangrijk om te weten: de tool onthoudt zelf niets tussen sessies. Je werkt altijd volgens dit ritme:</p>
 <ol>
-<li>Open de generator: <code>…/beheer/generator.html</code>.</li>
-<li><b>CSV plakken:</b> open het ledenbestand (CSV) in Kladblok of een teksteditor, selecteer alles (<kbd>Ctrl+A</kbd>), kopieer en plak in het vak bij stap 1. Klik op <kbd>Lees CSV in</kbd>. Eerste regel = kolomnamen; scheidingsteken <code>;</code> of <code>,</code> wordt automatisch herkend. Excel-bestand? Eerst opslaan als "CSV UTF-8".</li>
-<li><b>Kolommen koppelen:</b> controleer de automatische koppeling. Velden die niet openbaar mogen (bijv. e-mail) zet je op <i>— niet gebruiken —</i>.</li>
-<li><b>Artikel invullen:</b> titel, datum, intro en tekst. Opmaak: lege regel = nieuwe alinea, <code>##&nbsp;</code> = tussenkop, <code>-&nbsp;</code> = opsomming. Het URL-veld mag leeg blijven (de pagina gebruikt dan automatisch het adres waarop hij draait). Disclaimer alleen aanpassen in overleg met compliance.</li>
-<li>Klik <kbd>Voorbeeld tonen</kbd>, controleer, en dan <kbd>Download artikel.html</kbd>.</li>
-<li>Hernoem het gedownloade bestand volgens de vaste naamgeving: <code>jjjj-mm-onderwerp.html</code>, bijvoorbeeld <code>2026-09-rentevast.html</code>.</li>
+<li><b>Inladen</b>: plak je laatst opgeslagen beheerbestand (JSON) in het inlaadvak, of een dealer_import.csv uit de Dutch Media Lab-omgeving. (Bij de eerste keer staan Jeroen en Addy er al in.)</li>
+<li><b>Wijzigen</b>: kies een adviseur in de keuzelijst, pas de velden aan en klik <kbd>Wijzigingen opslaan in lijst</kbd>. Nieuwe adviseur: <kbd>+ Nieuwe adviseur</kbd>; geef altijd een uniek, blijvend <b>advisornummer</b> (dit komt in alle links en mag daarna nooit meer wijzigen).</li>
+<li><b>Beheerbestand downloaden</b>: klik <kbd>Beheerbestand (JSON)</kbd> en bewaar het bestand — dit is je bronbestand voor de volgende sessie.</li>
+<li><b>Doorzetten naar de site</b>:
+  <ul>
+  <li><kbd>Zoeker-datablok</kbd> → kopieer de uitvoer → open in GitHub <code>zoeker.html</code> met het potloodje → vervang daar het volledige <code>var PLANNERS = {…};</code>-blok → Commit.</li>
+  <li><kbd>Generator-CSV</kbd> → bewaren voor stap 1 van het volgende maandartikel.</li>
+  <li><kbd>dealer_import.csv</kbd> → alleen nodig als je dezelfde data ook naar hypotheekadviseurzoeker.nl wilt uploaden (Importeren-menu aldaar).</li>
+  </ul></li>
 </ol>
+<div class="blok"><b>Coördinaten:</b> breedte- en lengtegraad zijn nodig voor de afstandszoeker en de kaart. Opzoeken: rechtermuisklik op de vestigingslocatie in Google Maps en klik op de getoonde coördinaten om ze te kopiëren.</div>
+<div class="blok"><b>WhatsApp:</b> vul het veld "WhatsApp-nummer" (06) om op de detailpagina een WhatsApp-knop en -icoon te tonen die direct een chat opent (wa.me). Vaste nummers krijgen die knop bewust niet. Vraag de adviseur vooraf of het 06-nummer publiek mag.</div>
+</section>
 
-<h3>Stap 2 — Uploaden naar GitHub</h3>
+<section id="artikel">
+<h2>3. Maandelijkse werkwijze: nieuw artikel (± 30 minuten)</h2>
+<h3>Stap 1 — Artikelpagina maken</h3>
 <ol>
-<li>Ga naar <code>github.com/jeroen-o/artikel-generator-nvhp</code> en log in.</li>
-<li>Open de map <code>artikelen</code>.</li>
-<li>Klik <kbd>Add file</kbd> → <kbd>Upload files</kbd>, sleep het nieuwe bestand erin en klik <kbd>Commit changes</kbd>.</li>
-<li>Wacht 1–10 minuten; de pagina staat dan live op <code>…/artikelen/&lt;bestandsnaam&gt;.html</code>.</li>
+<li>Open <code>…/beheer/generator.html</code>.</li>
+<li>Plak de <b>generator-CSV</b> (uit het adviseursbeheer) in stap 1 en klik <kbd>Lees CSV in</kbd>; controleer de kolomkoppeling.</li>
+<li>Vul titel, datum en intro in. Artikeltekst-opmaak: lege regel = alinea, <code>##&nbsp;</code> = tussenkop, <code>-&nbsp;</code> = opsomming.</li>
+<li><b>Afbeelding (aanbevolen)</b>: upload eerst een artikelfoto in de map <code>fotos/</code> van de repository en vul in het veld "Afbeelding-URL" <code>../fotos/naam.jpg</code> in. De foto verschijnt als kopfoto én als preview-afbeelding bij het delen op social media (og:image). Gebruik uitsluitend eigen of gelicentieerd beeld.</li>
+<li>URL-veld leeg laten (vult zichzelf), disclaimer laten staan. <kbd>Voorbeeld tonen</kbd> → controleren → <kbd>Download artikel.html</kbd>.</li>
+<li>Hernoem naar het vaste patroon <code>jjjj-mm-onderwerp.html</code>, bijv. <code>2026-09-rentevast.html</code>.</li>
 </ol>
-
-<h3>Stap 3 — Artikel op de voorpagina zetten</h3>
+<h3>Stap 2 — Live zetten op GitHub</h3>
 <ol>
-<li>Open in de repository het bestand <code>index.html</code> en klik op het potloodje (<kbd>Edit</kbd>).</li>
-<li>Zoek het commentaar <code>&lt;!-- Nieuw artikel? … --&gt;</code>. Kopieer het blok dat eronder staat (van <code>&lt;a class="artikel"…</code> tot en met <code>&lt;/a&gt;</code>), plak het er direct boven (nieuwste bovenaan) en pas aan: <code>href</code> (bestandsnaam), datum, titel en omschrijving.</li>
-<li>Klik <kbd>Commit changes</kbd>.</li>
+<li>Repository → map <code>artikelen</code> → <kbd>Add file</kbd> → <kbd>Upload files</kbd> → bestand erin → <kbd>Commit changes</kbd>. (Bestaand bestand overschrijven = uploaden met exact dezelfde naam.)</li>
+<li>Voorpagina bijwerken: open <code>index.html</code> (potloodje), kopieer het bovenste artikelblok (<code>&lt;a class="artikel"…&lt;/a&gt;</code>), plak het erboven en pas <code>href</code>, datum, titel en omschrijving aan. Commit.</li>
+<li>Zoeker bijwerken: open <code>zoeker.html</code> (potloodje) en pas de regel <code>var LAATSTE_ARTIKEL = …</code> aan (titel + pad), zodat detailpagina's naar het nieuwe artikel linken.</li>
+<li>Na 1–10 minuten live; hard vernieuwen met <kbd>Ctrl+F5</kbd>.</li>
 </ol>
-
-<h3>Stap 4 — Planners mailen</h3>
+<h3>Stap 3 — Planners mailen</h3>
 <ol>
-<li>Open <code>…/beheer/deellinks.html</code>.</li>
-<li>Plak bij stap 1 de volledige artikel-URL (bijv. <code>https://jeroen-o.github.io/artikel-generator-nvhp/artikelen/2026-09-rentevast.html</code>) en vul de artikeltitel in.</li>
-<li>Tab <b>Bulk</b>: plak de lijst als <code>Naam;Nummer;E-mail</code> en klik <kbd>Genereer tabel</kbd>.</li>
-<li>Klik per planner op <kbd>✉ Mail adviseur</kbd>: je mailprogramma opent met adres, onderwerp en gepersonaliseerde tekst — alleen nog op verzenden klikken. Voor grotere aantallen: <kbd>Download CSV</kbd> en gebruik die als bron voor een mail merge.</li>
-<li>Planner die de mail heeft gemist? Zelfde rij, knop <kbd>↺ Herinnering</kbd>.</li>
+<li>Open <code>…/beheer/deellinks.html</code>; vul artikel-URL en -titel in.</li>
+<li>Bulk-tab: plak <code>Naam;Advisornummer;E-mail</code> → <kbd>Genereer tabel</kbd> → per planner <kbd>✉ Mail adviseur</kbd> (opent je mailprogramma vooringevuld). Herinnering nodig: knop <kbd>↺ Herinnering</kbd>.</li>
+<li>Grotere aantallen: <kbd>Download CSV</kbd> en gebruik die als bron voor een mail merge (Gmail meerdere-verzendmodus, Laposta, Spotler).</li>
 </ol>
 </section>
 
-<section id="csv">
-<h2>3. Eisen aan het CSV-bestand</h2>
+<section id="fotos">
+<h2>4. Foto's en logo's</h2>
 <table>
-<tr><th>Veld</th><th>Verplicht</th><th>Toelichting</th></tr>
-<tr><td>Advisor-nummer</td><td>Ja</td><td>Uniek en stabiel per planner (bijv. lidnummer); dit nummer komt in de link. Gebruik elke maand hetzelfde nummer, dan blijven eerder gedeelde links kloppen.</td></tr>
-<tr><td>Naam</td><td>Ja</td><td>Zoals getoond in het afzenderblok.</td></tr>
-<tr><td>Kantoor, plaats</td><td>Nee</td><td>Getoond onder de naam.</td></tr>
-<tr><td>Telefoonnummer</td><td>Nee</td><td>Wordt een belknop (werkt direct op mobiel).</td></tr>
-<tr><td>E-mailadres</td><td>Nee</td><td>Wordt een e-mailknop. Alleen opnemen als de planner dat wil: het adres wordt openbaar en kan door spammers worden geoogst.</td></tr>
-<tr><td>Profiel-/website-URL</td><td>Nee</td><td>Knop "Bekijk profiel".</td></tr>
-<tr><td>Foto-URL</td><td>Nee</td><td>Moet een publiek bereikbare https-URL zijn.</td></tr>
+<tr><th>Bestand</th><th>Gebruik</th></tr>
+<tr><td><code>fotos/nvhp-logo.png</code></td><td>Navigatiebalk op alle pagina's (officieel logo met tagline).</td></tr>
+<tr><td><code>fotos/favicon.png</code></td><td>Browsertab-icoon, op alle pagina's en in nieuwe artikelen.</td></tr>
+<tr><td><code>fotos/&lt;naam&gt;.jpg</code></td><td>Profielfoto per adviseur (rond getoond; vierkant aanleveren, min. 240×240). Pad invullen bij "Overzichtsafbeelding" in het adviseursbeheer.</td></tr>
+<tr><td><code>fotos/&lt;kantoor&gt;-logo.png</code></td><td>Kantoorlogo, rechts op de detailpagina ("Detailafbeelding").</td></tr>
+<tr><td><code>fotos/facebook.png</code> e.a.</td><td>Social-iconen; niet wijzigen.</td></tr>
+<tr><td><code>fotos/&lt;artikel&gt;.jpg</code></td><td>Kopfoto per artikel (via het afbeeldingsveld in de generator).</td></tr>
 </table>
+<div class="blok waarschuwing"><b>Geen LinkedIn-fotolinks gebruiken:</b> links naar media.licdn.com verlopen (vervaltoken) en LinkedIn blokkeert weergave op andere sites. Vraag adviseurs om het originele fotobestand en upload dat in <code>fotos/</code>.</div>
 </section>
 
 <section id="testen">
-<h2>4. Testchecklist vóór verzending</h2>
+<h2>5. Testchecklist vóór verzending</h2>
 <ol>
-<li>Kale artikel-URL openen → fallback "Vind een hypothecair planner" zichtbaar, artikel leesbaar op mobiel én desktop.</li>
-<li>URL met <code>?advisor=nummer</code> van drie verschillende planners → juiste naam, telefoonnummer en knoppen.</li>
-<li>Niet-bestaand nummer (<code>?advisor=99999</code>) → nette fallback, geen foutmelding.</li>
-<li>Voorpagina met <code>/?advisor=nummer</code> openen en doorklikken → nummer gaat mee naar het artikel.</li>
-<li>Belknop testen op een telefoon; e-mailknop aanklikken.</li>
-<li>Eén proefdeling op Facebook of LinkedIn: link plaatsen, erop klikken en controleren of <code>?advisor=…</code> in de adresbalk behouden blijft.</li>
+<li>Kale artikel-URL → verwijzing naar de zoeker zichtbaar; leesbaar op mobiel én desktop; favicon zichtbaar in het tabblad.</li>
+<li><code>?advisor=nummer</code> van drie planners → juiste foto, naam en knoppen; niet-bestaand nummer → nette terugval.</li>
+<li>Zoeker: zoek op plaats én op postcode met afstandsfilter; open de kaartweergave; controleer een detailpagina (openingstijden, tags, artikelknop).</li>
+<li>Belknop en WhatsApp-knop testen op een telefoon; e-mailknop en profiellink aanklikken.</li>
+<li>Proefdeling op Facebook of LinkedIn: klopt de preview (titel, intro, afbeelding)? En — belangrijkste — blijft <code>?advisor=…</code> in de adresbalk staan na doorklikken?</li>
 </ol>
-<div class="blok"><b>Bekend aandachtspunt social media:</b> de preview (titel, intro) is voor iedere planner gelijk; dat is normaal. Blijkt bij de proefdeling dat het advisor-nummer bij doorklikken wegvalt, meld dat dan bij de beheerder — de oplossing is dan een unieke URL per planner, waarvoor een uitbreiding van de generator nodig is.</div>
+<div class="blok"><b>Previews verversen:</b> Facebook en LinkedIn cachen previews. Na het toevoegen van een afbeelding: haal de URL door de Facebook Sharing Debugger of LinkedIn Post Inspector om de cache te verversen.</div>
 </section>
 
 <section id="beheer">
-<h2>5. Beheer en veelvoorkomende situaties</h2>
+<h2>6. Veelvoorkomende situaties</h2>
 <table>
 <tr><th>Situatie</th><th>Actie</th></tr>
-<tr><td>Nieuw maandartikel</td><td>Werkwijze hoofdstuk 2 doorlopen; nieuw bestand naast de oude zetten. Oude artikelen laten staan: gedeelde links blijven dan werken.</td></tr>
-<tr><td>Planner erbij of eraf</td><td>CSV aanpassen, hetzelfde artikel opnieuw genereren, en in GitHub het bestaande bestand in <code>artikelen/</code> overschrijven (uploaden met exact dezelfde bestandsnaam = overschrijven). Werk ook <code>zoeker.html</code> bij: open het bestand in GitHub (potloodje) en pas het gemarkeerde <code>PLANNERS</code>-blok bovenin het script aan (zelfde formaat als in de artikelpagina's).</td></tr>
-<tr><td>Nieuw artikel in de zoeker</td><td>Open <code>zoeker.html</code> (potloodje) en pas de regel <code>LAATSTE_ARTIKEL</code> aan: titel en pad van het nieuwste artikel.</td></tr>
-<tr><td>Telefoonnummer gewijzigd</td><td>Idem. De wijziging geldt direct voor alle al gedeelde links van dat artikel.</td></tr>
-<tr><td>Wijziging staat na 10 min. nog niet live</td><td>Browsercache: hard vernieuwen met <kbd>Ctrl+F5</kbd>. Controleer anders op GitHub onder "Actions" of de laatste publicatie geslaagd is.</td></tr>
-<tr><td>Afzenderblok blijft leeg</td><td>Nummer in de link komt niet exact overeen met het nummer in de CSV (voorloopnullen en spaties tellen mee).</td></tr>
-<tr><td>Planner heeft de mail gemist</td><td>Deellink-tool → knop "Herinnering" bij de betreffende planner.</td></tr>
+<tr><td>Nieuw maandartikel</td><td>Hoofdstuk 3 doorlopen; oude artikelen laten staan zodat gedeelde links blijven werken.</td></tr>
+<tr><td>Adviseur erbij, eraf of gewijzigd</td><td>Adviseursbeheer: JSON inladen → wijzigen → opslaan → JSON downloaden → zoeker-datablok exporteren en in <code>zoeker.html</code> plakken. Staat de adviseur in het lopende maandartikel: ook generator-CSV exporteren, artikel opnieuw genereren en het bestand in <code>artikelen/</code> overschrijven.</td></tr>
+<tr><td>Wijziging na 10 min. niet zichtbaar</td><td>Browsercache: <kbd>Ctrl+F5</kbd>. Anders op GitHub onder "Actions" controleren of de publicatie geslaagd is.</td></tr>
+<tr><td>Afzenderblok blijft leeg</td><td>Nummer in de link komt niet exact overeen met het nummer in de data (spaties/voorloopnullen tellen mee).</td></tr>
+<tr><td>Planner heeft de mail gemist</td><td>Deellinks-tool → knop <kbd>↺ Herinnering</kbd>.</td></tr>
+<tr><td>Beheerbestand kwijt</td><td>Herbouwen kan: exporteer bij DML een dealer_import.csv en laad die in het adviseursbeheer; vul advisornummers en extra velden aan. Voorkom dit: bewaar de JSON op een vaste plek met datum in de naam.</td></tr>
+<tr><td>Eigen domein instellen</td><td>CNAME-record <code>artikelen.hypothecairplanner.nl → jeroen-o.github.io</code> laten aanmaken en invullen bij Settings → Pages → Custom domain; daarna "Enforce HTTPS" aanzetten.</td></tr>
 </table>
-<p class="klein">Bewaar per maand de gebruikte CSV en het gegenereerde bestand in een vaste (interne) map, zodat te herleiden is welke gegevens wanneer gepubliceerd waren. De GitHub-historie is hiervoor niet geschikt als officieel archief (zie hoofdstuk 6).</p>
-<h3>Later: eigen domein</h3>
-<p>Voor productie is een subdomein netter dan <code>github.io</code>, bijv. <code>artikelen.hypothecairplanner.nl</code>: laat de DNS-beheerder een CNAME-record aanmaken naar <code>jeroen-o.github.io</code> en vul het subdomein in bij <i>Settings → Pages → Custom domain</i> (daarna "Enforce HTTPS" aanzetten). Alle bestaande paden blijven werken.</p>
 </section>
 
 <section id="compliance">
-<h2>6. AVG en compliance</h2>
-<div class="blok waarschuwing"><b>AVG — openbare data:</b> alle gekoppelde CSV-velden komen in de broncode van de openbare pagina's te staan. Neem uitsluitend planners op die daarvoor toestemming hebben gegeven, en per planner alleen de velden die hij of zij wil publiceren. Leg de toestemming vast (bijvoorbeeld via het lidmaatschapsprofiel).</div>
-<div class="blok waarschuwing"><b>AVG — GitHub-historie:</b> de repository is publiek en GitHub bewaart alle oude versies. Gegevens van een planner die zich terugtrekt verdwijnen dus níet door alleen het bestand te overschrijven. Beperk daarom de ingesloten data tot wat toch al openbaar is (naam, kantoor, zakelijk telefoonnummer). Bij een formeel verwijderverzoek: nieuwe repository aanmaken of de historie laten herschrijven door een technisch beheerder.</div>
-<div class="blok waarschuwing"><b>Wft/AFM:</b> de artikelen zijn openbare informatieve uitingen over financiële producten. Zorg dat de inhoud feitelijk juist, actueel en niet misleidend is, vermijd concrete productaanbevelingen, en laat elk artikel plus disclaimer vóór publicatie beoordelen door de compliance-verantwoordelijke. Spreek met planners af dat zij bij het delen alleen het intro overnemen met doorlink en geen eigen claims toevoegen.</div>
-<p class="klein">Mailings aan planners vallen onder de spamregels van de Telecommunicatiewet: verstuur alleen aan leden die deze berichten verwachten (lidmaatschapscommunicatie) en bied een afmeldmogelijkheid.</p>
+<h2>7. AVG en compliance</h2>
+<div class="blok waarschuwing"><b>AVG — openbare data:</b> alles wat naar de zoeker of artikelen wordt geëxporteerd staat in de broncode van openbare pagina's, inclusief foto's, 06-nummers en e-mailadressen. Uitsluitend publiceren met vastgelegde toestemming per adviseur, per veld.</div>
+<div class="blok waarschuwing"><b>AVG — GitHub-historie:</b> de publieke repository bewaart oude versies; overschrijven is geen verwijderen. Beperk publicatie tot wat toch al openbaar is, en gebruik bij een formeel verwijderverzoek een nieuwe repository of laat de historie herschrijven.</div>
+<div class="blok waarschuwing"><b>AVG — beheerbestand:</b> het JSON-werkbestand bevat persoonsgegevens van alle adviseurs. Bewaar het op een beveiligde plek (niet in de repository!) en deel het niet onnodig.</div>
+<div class="blok waarschuwing"><b>Wft/AFM:</b> artikelen zijn openbare informatieve uitingen over financiële producten: feitelijk juist, actueel, niet misleidend, geen concrete productaanbevelingen. Elk artikel plus disclaimer vóór publicatie langs de compliance-verantwoordelijke. Planners nemen bij het delen alleen het intro over met doorlink en voegen geen eigen claims toe.</div>
+<p class="klein">Mailings aan planners vallen onder de Telecommunicatiewet: alleen versturen aan leden die deze berichten verwachten en een afmeldmogelijkheid bieden. Beeldmateriaal: alleen eigen of gelicentieerde foto's en logo's, met toestemming van de afgebeelde persoon (portretrecht).</p>
 </section>
 
 </main>
