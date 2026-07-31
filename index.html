@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consumentenartikelen | NVHP</title>
+<meta name="description" content="Betrouwbare, duidelijke artikelen over hypotheken en financiële planning, aangeboden door hypothecair planners (NVHP).">
+<style>
+:root{--primair:#12284b;--accent:#c8a24a;--tekst:#1a2333;--zacht:#5a6579;--lijn:#dde3ec}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--tekst);line-height:1.6;background:#f4f6f9;padding-bottom:60px}
+.kop{background:var(--primair);color:#fff;padding:34px 20px}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+.kop .wrap{padding:0}
+.kop .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px}
+h1{font-size:1.6rem}
+.kop p{color:#c9d3e4;font-size:.92rem;margin-top:6px}
+.lijst{padding:26px 0}
+.artikel{display:block;background:#fff;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:8px;padding:18px 20px;margin-bottom:14px;text-decoration:none;color:var(--tekst)}
+.artikel:hover{border-color:var(--primair)}
+.artikel .datum{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--zacht);font-weight:700}
+.artikel h2{font-size:1.1rem;color:var(--primair);margin:4px 0 6px}
+.artikel p{font-size:.9rem;color:var(--zacht)}
+.voet{font-size:.78rem;color:var(--zacht);border-top:1px solid var(--lijn);padding-top:14px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="kop"><div class="wrap">
+  <span class="lint">NVHP consumentenartikelen</span>
+  <h1>Helder over hypotheken</h1>
+  <p>Betrouwbare, duidelijke artikelen over hypotheken en financiële planning — aangeboden door hypothecair planners.</p>
+</div></div>
+<div class="wrap lijst">
+
+  <!-- Nieuw artikel? Kopieer een blok hieronder, pas href, datum, titel en omschrijving aan. Nieuwste bovenaan. -->
+  <a class="artikel" href="artikelen/2026-08-verduurzaming.html">
+    <span class="datum">augustus 2026</span>
+    <h2>Verduurzaming gaat verder dan de energierekening</h2>
+    <p>Wie alleen naar de energierekening kijkt, mist een belangrijk deel van het verhaal: woningwaarde, hypotheekmogelijkheden en toekomstige woonlasten.</p>
+  </a>
+
+  <p class="voet">De artikelen op deze pagina zijn algemene informatie en vormen geen persoonlijk financieel advies. Neem voor advies dat past bij jouw situatie contact op met een hypothecair planner (NVHP).</p>
+</div>
+<script>
+/* Geeft ?advisor=nummer automatisch door aan de artikellinks, zodat een gedeelde
+   overzichtslink de afzender behoudt. */
+var q = location.search;
+if(q){ document.querySelectorAll('a.artikel').forEach(function(a){ a.href += q; }); }
+</script>
+</body>
+</html>
