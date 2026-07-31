@@ -13,7 +13,7 @@
   --tekst:#22304a; --zacht:#5d6b84; --lijn:#d7e0ec;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.6;padding-bottom:60px}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.7;padding-bottom:80px}
 .balk{background:#fff;border-bottom:1px solid var(--lijn);padding:14px 20px}
 .balk .wrap{display:flex;align-items:center;gap:12px}
 .wrap{max-width:960px;margin:0 auto;padding:0 20px}
@@ -21,24 +21,24 @@ body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:
 .logo b{font-size:1.5rem;color:var(--navy);letter-spacing:.04em}
 .logo .dak{color:var(--rood);font-size:1.1rem}
 .logo span{font-size:.68rem;color:var(--zacht)}
-.hero{background:var(--navy);color:#fff;padding:36px 20px 110px;position:relative}
+.hero{background:var(--navy);color:#fff;padding:48px 20px 120px;position:relative}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:70px;background:var(--achtergrond);border-radius:100% 100% 0 0/70px 70px 0 0}
 .hero h1{font-size:1.7rem;text-transform:uppercase;letter-spacing:.03em}
 .hero .sub{color:#e8b7c0;font-weight:600;margin-top:2px}
-.hero .sub2{color:#c8d6ea;font-size:.92rem;margin-top:6px;max-width:560px}
-.zoekkaart{background:#fff;border:1px solid var(--lijn);border-radius:12px;box-shadow:0 8px 24px rgba(20,41,79,.10);padding:22px;margin:-70px auto 22px;position:relative;max-width:920px}
+.hero .sub2{color:#c8d6ea;font-size:.95rem;margin-top:10px;max-width:580px}
+.zoekkaart{background:#fff;border:1px solid var(--lijn);border-radius:14px;box-shadow:0 8px 24px rgba(20,41,79,.10);padding:28px;margin:-70px auto 30px;position:relative;max-width:920px}
 .zoekkaart .velden{display:grid;grid-template-columns:1.2fr 1.2fr .7fr auto;gap:12px;align-items:end}
 @media(max-width:760px){.zoekkaart .velden{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.zoekkaart .velden{grid-template-columns:1fr}}
 label{display:block;font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
 input[type=text],select{width:100%;padding:11px 12px;border:1px solid var(--lijn);border-radius:8px;font-size:.93rem;font-family:inherit;background:#fff;color:var(--tekst)}
 input:focus,select:focus{outline:2px solid var(--groen)}
-.knop{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--groen);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;text-transform:uppercase;letter-spacing:.03em}
+.knop{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--groen);color:#fff;border:none;border-radius:9px;padding:13px 24px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;text-transform:uppercase;letter-spacing:.03em}
 .knop:hover{background:var(--groen-donker)}
 .knop.navy{background:var(--navy)}.knop.navy:hover{background:var(--navy-donker)}
 .knop.licht{background:var(--lichtblauw);color:var(--navy);text-transform:none;letter-spacing:0}
 .knop.licht:hover{background:#cfe2f2}
-.filters{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:14px;border-top:1px solid var(--lijn);padding-top:12px}
+.filters{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:18px;border-top:1px solid var(--lijn);padding-top:16px}
 .filters .titel{font-size:.78rem;font-weight:700;color:var(--navy)}
 .check{display:flex;align-items:center;gap:6px;font-size:.85rem}
 .check input{width:auto;accent-color:var(--groen)}
@@ -46,9 +46,9 @@ input:focus,select:focus{outline:2px solid var(--groen)}
 .weergave button{border:1px solid var(--lijn);background:#fff;color:var(--navy);border-radius:7px;padding:7px 14px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit}
 .weergave button.actief{background:var(--navy);color:#fff;border-color:var(--navy)}
 .teller{font-size:.84rem;color:var(--zacht);margin:0 0 12px}
-.kaartje{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:16px 18px;margin-bottom:12px;display:flex;gap:14px;align-items:center;cursor:pointer;transition:border-color .12s}
+.kaartje{background:#fff;border:1px solid var(--lijn);border-radius:12px;padding:22px 24px;margin-bottom:16px;display:flex;gap:18px;align-items:center;cursor:pointer;transition:border-color .12s}
 .kaartje:hover{border-color:var(--groen)}
-.avatar{width:60px;height:60px;border-radius:50%;flex:none;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;overflow:hidden}
+.avatar{width:68px;height:68px;border-radius:50%;flex:none;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
 .kaartje .info{flex:1;min-width:0}
 .kaartje .naam{font-weight:700;color:var(--navy);font-size:1.05rem}
@@ -59,29 +59,31 @@ input:focus,select:focus{outline:2px solid var(--groen)}
 .kaartpaneel{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:14px;display:none}
 .kaartpaneel svg{width:100%;height:auto;display:block;max-height:560px}
 .kaartpaneel .noot{font-size:.75rem;color:var(--zacht);text-align:center;margin-top:6px;font-style:italic}
-.detail{background:#fff;border:1px solid var(--lijn);border-radius:12px;padding:26px;display:none}
-.detail .top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.detail .avatar{width:90px;height:90px;font-size:1.6rem}
+.detail{background:#fff;border:1px solid var(--lijn);border-radius:14px;padding:40px;display:none}
+@media(max-width:680px){.detail{padding:26px 20px}}
+.detail .top{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--lijn)}
+.detail .avatar{width:104px;height:104px;font-size:1.7rem}
 .detail h2{color:var(--navy);font-size:1.4rem;text-transform:uppercase;letter-spacing:.02em}
 .detail .subtitel{color:var(--rood);font-weight:600;font-size:.95rem}
 .detail .plaats{color:var(--zacht);font-size:.9rem}
-.kolommen{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;margin-top:16px}
+.kolommen{display:grid;grid-template-columns:1.5fr 1fr;gap:36px;margin-top:22px}
 @media(max-width:680px){.kolommen{grid-template-columns:1fr}}
-.sectie{margin-bottom:18px}
-.sectie h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--navy);border-bottom:2px solid var(--rood);display:inline-block;padding-bottom:2px;margin-bottom:8px}
+.sectie{margin-bottom:28px}
+.sectie h3{font-size:.84rem;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);border-bottom:2px solid var(--rood);display:inline-block;padding-bottom:3px;margin-bottom:12px}
 .sectie ul{margin:0 0 0 20px}
-.sectie li{margin-bottom:4px;font-size:.92rem}
-.tag{display:inline-block;background:var(--lichtblauw);color:var(--navy);border-radius:16px;padding:3px 12px;font-size:.8rem;font-weight:600;margin:0 6px 6px 0}
+.sectie li{margin-bottom:8px;font-size:.94rem}
+.tag{display:inline-block;background:var(--lichtblauw);color:var(--navy);border-radius:18px;padding:6px 16px;font-size:.82rem;font-weight:600;margin:0 8px 8px 0}
 .tag.groen{background:#e2f2ea;color:var(--groen-donker)}
-.contactblok{background:var(--lichtblauw);border-radius:10px;padding:18px}
-.contactblok h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--navy);margin-bottom:10px}
-.contactblok p{font-size:.9rem;margin-bottom:8px;word-break:break-word}
-.contactblok a{color:var(--navy)}
-.contactblok .acties{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.contactblok{background:var(--lichtblauw);border-radius:12px;padding:24px}
+.contactblok h3{font-size:.84rem;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin-bottom:14px}
+.contactblok p{font-size:.92rem;margin-bottom:11px;word-break:break-word}
+.contactblok p a{color:var(--navy)}
+.contactblok .acties .knop{color:#fff}
+.contactblok .acties{display:flex;flex-direction:column;gap:10px;margin-top:18px}
 .tijden{width:100%;border-collapse:collapse;font-size:.88rem}
-.tijden td{padding:3px 0;border-bottom:1px solid #eef3f9}
+.tijden td{padding:7px 0;border-bottom:1px solid #eef3f9}
 .tijden td:first-child{font-weight:700;color:var(--navy);width:52px}
-.terug{background:none;border:none;color:var(--navy);font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit;padding:0;margin-bottom:16px;text-decoration:underline}
+.terug{background:none;border:none;color:var(--navy);font-weight:700;font-size:.88rem;cursor:pointer;font-family:inherit;padding:0;margin-bottom:24px;text-decoration:underline}
 .voet{font-size:.78rem;color:var(--zacht);font-style:italic;margin-top:26px;border-top:1px solid var(--lijn);padding-top:14px}
 </style>
 </head>
@@ -320,15 +322,15 @@ function toonDetail(id){
   if(p.e) c += '<p>✉ <a href="mailto:'+escT(p.e)+'">'+escT(p.e)+'</a></p>';
   if(p.t) c += '<p>☎ <a href="tel:'+escT(p.t.replace(/[^+\d]/g,''))+'">'+escT(p.t)+'</a></p>';
   var soc = [];
-  if(p.li) soc.push('<a href="'+escT(p.li)+'" target="_blank" rel="noopener">LinkedIn</a>');
-  if(p.fb) soc.push('<a href="'+escT(p.fb)+'" target="_blank" rel="noopener">Facebook</a>');
-  if(soc.length) c += '<p>'+soc.join(' · ')+'</p>';
+  if(p.fb) soc.push('<a href="'+escT(p.fb)+'" target="_blank" rel="noopener" title="Facebook"><img src="fotos/facebook.png" alt="Facebook" style="width:26px;height:26px;display:block"></a>');
+  if(p.li) soc.push('<a href="'+escT(p.li)+'" target="_blank" rel="noopener" title="LinkedIn"><img src="fotos/linkedin.png" alt="LinkedIn" style="width:26px;height:26px;display:block"></a>');
+  if(soc.length) c += '<p style="display:flex;gap:10px;align-items:center">'+soc.join('')+'</p>';
   c += '<div class="acties">';
   if(p.t) c += '<a class="knop" href="tel:'+escT(p.t.replace(/[^+\d]/g,''))+'">Bel direct</a>';
   if(p.e) c += '<a class="knop navy" href="mailto:'+escT(p.e)+'">Stuur een e-mail</a>';
   c += '</div></div>';
   if(p.tijden && p.tijden.length){
-    c += '<div class="contactblok" style="margin-top:14px"><h3>Openingstijden</h3><table class="tijden">'
+    c += '<div class="contactblok" style="margin-top:18px"><h3>Openingstijden</h3><table class="tijden">'
       + p.tijden.map(function(r){return '<tr><td>'+escT(r[0])+'</td><td>'+escT(r[1])+'</td></tr>'}).join('')
       + '</table></div>';
   }
