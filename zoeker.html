@@ -3,138 +3,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vind een hypothecair planner | NVHP</title>
-<meta name="description" content="Zoek een hypothecair planner (NVHP) op naam, kantoor of plaats en neem direct contact op.">
+<title>Zoek een Erkend Hypothecair Planner | NVHP</title>
+<meta name="description" content="Via deze zoeker vindt u een Erkend Hypothecair Planner bij u in de buurt. Zoek op naam, plaats of postcode.">
 <style>
-:root{--primair:#12284b;--primair-licht:#1d3f77;--accent:#c8a24a;--achtergrond:#f4f6f9;--tekst:#1a2333;--zacht:#5a6579;--lijn:#dde3ec}
+:root{
+  --navy:#1c3a6e; --navy-donker:#14294f; --rood:#ae1932;
+  --groen:#5aa987; --groen-donker:#478d6f;
+  --lichtblauw:#ddebf6; --achtergrond:#f6f9fc;
+  --tekst:#22304a; --zacht:#5d6b84; --lijn:#d7e0ec;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.6;padding-bottom:60px}
-.kop{background:var(--primair);color:#fff;padding:34px 20px}
-.wrap{max-width:760px;margin:0 auto;padding:0 20px}
-.kop .wrap{padding:0}
-.kop .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px}
-h1{font-size:1.6rem}
-.kop p{color:#c9d3e4;font-size:.92rem;margin-top:6px}
-.zoekbalk{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
-.zoekbalk input{flex:1;min-width:220px;padding:12px 14px;border:none;border-radius:8px;font-size:.95rem;font-family:inherit}
-.zoekbalk input:focus{outline:3px solid var(--accent)}
-main{padding:22px 0}
-.teller{font-size:.82rem;color:var(--zacht);margin:0 20px 12px}
-@media(min-width:800px){.teller{margin-left:auto;margin-right:auto;max-width:760px;padding:0 20px}}
-.kaart{background:#fff;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;margin:0 20px 12px;display:flex;gap:14px;align-items:center;cursor:pointer}
-@media(min-width:800px){.kaart{margin-left:auto;margin-right:auto;max-width:760px}}
-.kaart:hover{border-color:var(--primair)}
-.avatar{width:56px;height:56px;border-radius:50%;flex:none;background:var(--primair);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;overflow:hidden}
+.balk{background:#fff;border-bottom:1px solid var(--lijn);padding:14px 20px}
+.balk .wrap{display:flex;align-items:center;gap:12px}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.logo{display:flex;align-items:baseline;gap:8px;text-decoration:none}
+.logo b{font-size:1.5rem;color:var(--navy);letter-spacing:.04em}
+.logo .dak{color:var(--rood);font-size:1.1rem}
+.logo span{font-size:.68rem;color:var(--zacht)}
+.hero{background:var(--navy);color:#fff;padding:36px 20px 110px;position:relative}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:70px;background:var(--achtergrond);border-radius:100% 100% 0 0/70px 70px 0 0}
+.hero h1{font-size:1.7rem;text-transform:uppercase;letter-spacing:.03em}
+.hero .sub{color:#e8b7c0;font-weight:600;margin-top:2px}
+.hero .sub2{color:#c8d6ea;font-size:.92rem;margin-top:6px;max-width:560px}
+.zoekkaart{background:#fff;border:1px solid var(--lijn);border-radius:12px;box-shadow:0 8px 24px rgba(20,41,79,.10);padding:22px;margin:-70px auto 22px;position:relative;max-width:920px}
+.zoekkaart .velden{display:grid;grid-template-columns:1.2fr 1.2fr .7fr auto;gap:12px;align-items:end}
+@media(max-width:760px){.zoekkaart .velden{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.zoekkaart .velden{grid-template-columns:1fr}}
+label{display:block;font-size:.78rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+input[type=text],select{width:100%;padding:11px 12px;border:1px solid var(--lijn);border-radius:8px;font-size:.93rem;font-family:inherit;background:#fff;color:var(--tekst)}
+input:focus,select:focus{outline:2px solid var(--groen)}
+.knop{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--groen);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;text-transform:uppercase;letter-spacing:.03em}
+.knop:hover{background:var(--groen-donker)}
+.knop.navy{background:var(--navy)}.knop.navy:hover{background:var(--navy-donker)}
+.knop.licht{background:var(--lichtblauw);color:var(--navy);text-transform:none;letter-spacing:0}
+.knop.licht:hover{background:#cfe2f2}
+.filters{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:14px;border-top:1px solid var(--lijn);padding-top:12px}
+.filters .titel{font-size:.78rem;font-weight:700;color:var(--navy)}
+.check{display:flex;align-items:center;gap:6px;font-size:.85rem}
+.check input{width:auto;accent-color:var(--groen)}
+.weergave{margin-left:auto;display:flex;gap:6px}
+.weergave button{border:1px solid var(--lijn);background:#fff;color:var(--navy);border-radius:7px;padding:7px 14px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit}
+.weergave button.actief{background:var(--navy);color:#fff;border-color:var(--navy)}
+.teller{font-size:.84rem;color:var(--zacht);margin:0 0 12px}
+.kaartje{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:16px 18px;margin-bottom:12px;display:flex;gap:14px;align-items:center;cursor:pointer;transition:border-color .12s}
+.kaartje:hover{border-color:var(--groen)}
+.avatar{width:60px;height:60px;border-radius:50%;flex:none;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.kaart .info{flex:1;min-width:0}
-.kaart .naam{font-weight:700;color:var(--primair);font-size:1.02rem}
-.kaart .sub{font-size:.85rem;color:var(--zacht)}
-.kaart .pijl{color:var(--zacht);font-size:1.2rem;flex:none}
-.detail{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:26px;margin:0 20px 14px}
-@media(min-width:800px){.detail{margin-left:auto;margin-right:auto;max-width:760px}}
-.detail .top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
-.detail .avatar{width:84px;height:84px;font-size:1.5rem}
-.detail h2{color:var(--primair);font-size:1.35rem}
-.detail .sub{color:var(--zacht);font-size:.92rem}
-.acties{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.knop{display:inline-block;background:var(--primair);color:#fff;text-decoration:none;font-size:.86rem;font-weight:600;padding:9px 16px;border-radius:7px;border:none;cursor:pointer;font-family:inherit}
-.knop.licht{background:#e8ecf3;color:var(--primair)}
-.terug{background:none;border:none;color:var(--primair);font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit;padding:0;margin-bottom:14px;display:inline-block;text-decoration:underline}
-.leeg{text-align:center;color:var(--zacht);padding:40px 20px;font-size:.92rem}
-.voet{font-size:.78rem;color:var(--zacht);font-style:italic;margin:26px 20px 0;border-top:1px solid var(--lijn);padding-top:14px}
-@media(min-width:800px){.voet{margin-left:auto;margin-right:auto;max-width:760px}}
+.kaartje .info{flex:1;min-width:0}
+.kaartje .naam{font-weight:700;color:var(--navy);font-size:1.05rem}
+.kaartje .sub{font-size:.85rem;color:var(--zacht)}
+.kaartje .afstandlabel{font-size:.78rem;color:var(--groen-donker);font-weight:700}
+.kaartje .meer{flex:none}
+.leeg{text-align:center;color:var(--zacht);padding:36px 20px;background:#fff;border:1px dashed var(--lijn);border-radius:10px;font-size:.92rem}
+.kaartpaneel{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:14px;display:none}
+.kaartpaneel svg{width:100%;height:auto;display:block;max-height:560px}
+.kaartpaneel .noot{font-size:.75rem;color:var(--zacht);text-align:center;margin-top:6px;font-style:italic}
+.detail{background:#fff;border:1px solid var(--lijn);border-radius:12px;padding:26px;display:none}
+.detail .top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.detail .avatar{width:90px;height:90px;font-size:1.6rem}
+.detail h2{color:var(--navy);font-size:1.4rem;text-transform:uppercase;letter-spacing:.02em}
+.detail .subtitel{color:var(--rood);font-weight:600;font-size:.95rem}
+.detail .plaats{color:var(--zacht);font-size:.9rem}
+.kolommen{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;margin-top:16px}
+@media(max-width:680px){.kolommen{grid-template-columns:1fr}}
+.sectie{margin-bottom:18px}
+.sectie h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--navy);border-bottom:2px solid var(--rood);display:inline-block;padding-bottom:2px;margin-bottom:8px}
+.sectie ul{margin:0 0 0 20px}
+.sectie li{margin-bottom:4px;font-size:.92rem}
+.tag{display:inline-block;background:var(--lichtblauw);color:var(--navy);border-radius:16px;padding:3px 12px;font-size:.8rem;font-weight:600;margin:0 6px 6px 0}
+.tag.groen{background:#e2f2ea;color:var(--groen-donker)}
+.contactblok{background:var(--lichtblauw);border-radius:10px;padding:18px}
+.contactblok h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--navy);margin-bottom:10px}
+.contactblok p{font-size:.9rem;margin-bottom:8px;word-break:break-word}
+.contactblok a{color:var(--navy)}
+.contactblok .acties{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.tijden{width:100%;border-collapse:collapse;font-size:.88rem}
+.tijden td{padding:3px 0;border-bottom:1px solid #eef3f9}
+.tijden td:first-child{font-weight:700;color:var(--navy);width:52px}
+.terug{background:none;border:none;color:var(--navy);font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit;padding:0;margin-bottom:16px;text-decoration:underline}
+.voet{font-size:.78rem;color:var(--zacht);font-style:italic;margin-top:26px;border-top:1px solid var(--lijn);padding-top:14px}
 </style>
 </head>
 <body>
-<div class="kop"><div class="wrap">
-  <span class="lint">NVHP · plannerzoeker</span>
-  <h1>Vind een hypothecair planner</h1>
-  <p>Zoek op naam, kantoor of plaats en neem direct contact op.</p>
-  <div class="zoekbalk"><input type="text" id="zoek" placeholder="Bijv. Nijkerkerveen, Doetinchem of een naam…" autocomplete="off"></div>
+
+<div class="balk"><div class="wrap">
+  <a class="logo" href="index.html"><span class="dak">⌂</span><b>NVHP</b><span>Nederlandse Vereniging van Hypothecair Planners</span></a>
 </div></div>
-<main>
+
+<div class="hero"><div class="wrap">
+  <h1>Erkend Hypothecair Planner</h1>
+  <p class="sub">Uw vertrouwenspersoon voor al uw financiën</p>
+  <p class="sub2">Via deze zoeker vindt u een Erkend Hypothecair Planner bij u in de buurt. Vul voor optimaal resultaat een naam óf een plaats/postcode in.</p>
+</div></div>
+
+<div class="wrap">
+  <div class="zoekkaart">
+    <div class="velden">
+      <div><label for="zNaam">Voor- of achternaam</label><input type="text" id="zNaam" placeholder="Bijv. Nobel" autocomplete="off"></div>
+      <div><label for="zPlaats">Plaats of postcode</label><input type="text" id="zPlaats" placeholder="Bijv. Lochem of 7241" autocomplete="off"></div>
+      <div><label for="zAfstand">Afstand (km)</label>
+        <select id="zAfstand"><option value="10">10 km</option><option value="25" selected>25 km</option><option value="50">50 km</option><option value="10000">Heel Nederland</option></select>
+      </div>
+      <div><button class="knop" onclick="zoek()">Zoeken</button></div>
+    </div>
+    <div class="filters">
+      <span class="titel">Talen:</span>
+      <label class="check"><input type="checkbox" class="taalfilter" value="Nederlands"> Nederlands</label>
+      <label class="check"><input type="checkbox" class="taalfilter" value="Engels"> Engels (English)</label>
+      <div class="weergave">
+        <button id="wgLijst" class="actief" onclick="zetWeergave('lijst')">☰ Lijst</button>
+        <button id="wgKaart" onclick="zetWeergave('kaart')">⚲ Kaart</button>
+      </div>
+    </div>
+  </div>
+
   <p class="teller" id="teller"></p>
   <div id="lijst"></div>
-  <div id="detail" style="display:none"></div>
-  <p class="voet">De getoonde planners zijn aangesloten bij de NVHP en hebben toestemming gegeven voor vermelding van hun contactgegevens. Klopt er iets niet of wil je worden toegevoegd of verwijderd? Neem contact op met het NVHP-secretariaat.</p>
-</main>
+  <div class="kaartpaneel" id="kaartpaneel">
+    <svg id="nlkaart" viewBox="0 0 410 500" xmlns="http://www.w3.org/2000/svg"></svg>
+    <p class="noot">Indicatieve kaartweergave. Klik op een punt voor het profiel van de planner.</p>
+  </div>
+  <div class="detail" id="detail"></div>
+
+  <p class="voet">De getoonde planners zijn aangesloten bij de NVHP en hebben toestemming gegeven voor vermelding van hun contactgegevens. Afstanden zijn indicatief. Klopt er iets niet, of wilt u worden toegevoegd of verwijderd? Neem contact op met het NVHP-secretariaat via info@hypothecairplanner.nl.</p>
+</div>
+
 <script>
 "use strict";
 /* ================= PLANNERDATA =================
-   Bijwerken: pas onderstaand blok aan (zelfde formaat als in de artikelpagina's)
-   of vervang het door de data uit een nieuw gegenereerd artikelbestand.
-   Velden: n=naam, k=kantoor, p=plaats, t=telefoon, e=e-mail, w=profiel/website, f=foto-URL
+   Bijwerken: pas onderstaand blok aan. Velden:
+   n=naam, k=kantoor, p=plaats, adres, t=telefoon, e=e-mail,
+   w=website/profiel, f=foto-URL, la/lo=coördinaten (voor afstand en kaart),
+   intro, diensten[], talen[], erkenning[], afspraak[], webcam, li=LinkedIn, fb=Facebook,
+   tijden[ [dag, uren], ... ]
    ================================================ */
 var PLANNERS = {
-  "1001":{"n":"Jeroen Oversteegen","k":"Oversteegen.nl","p":"Nijkerkerveen","t":"06-21247257","e":"jeroen@oversteegen.nl","w":"https://www.linkedin.com/in/oversteegen/"},
-  "1002":{"n":"Addy Nobel","k":"Nobel Financieel Advies","p":"Doetinchem","t":"06-20761437","e":"addy.nobel@n-fa.nl","w":"https://www.nobelfinancieeladvies.nl/"}
+  "1001": {
+    n:"Jeroen Oversteegen", k:"Oversteegen.nl", p:"Nijkerkerveen",
+    t:"06-21247257", e:"jeroen@oversteegen.nl", w:"https://www.linkedin.com/in/oversteegen/",
+    la:52.196, lo:5.467,
+    intro:"Onafhankelijk hypothecair planner. Ik help je met heldere keuzes rond je hypotheek en financiële planning, afgestemd op jouw situatie en plannen.",
+    diensten:["Hypotheekadvies","Aankoop van een woning","Aanpassen van de hypotheek","Verduurzamen van de woning","Financiële planning"],
+    talen:["Nederlands","Engels"],
+    erkenning:["Hypothecair Planner (NVHP)"],
+    afspraak:["In de avond"],
+    webcam:true,
+    li:"https://www.linkedin.com/in/oversteegen/",
+    fb:"https://www.facebook.com/jeroen.oversteegen/",
+    tijden:[["Ma","09:00 – 17:30"],["Di","09:00 – 17:30"],["Wo","09:00 – 17:30"],["Do","09:00 – 17:30"],["Vr","09:00 – 17:30"],["Za","Op afspraak"],["Zo","Gesloten"]]
+  },
+  "1002": {
+    n:"Addy Nobel", k:"Nobel Financieel Advies", p:"Lochem",
+    adres:"Nieuwstad 44, 7241 DR Lochem",
+    t:"0573-763440", e:"info@n-fa.nl", w:"https://www.nobelfinancieeladvies.nl/",
+    la:52.160, lo:6.414,
+    intro:"Nobel Financieel Advies is gevestigd in Lochem en adviseert onafhankelijk over alles rond de hypotheek. Neem gerust contact op met Addy Nobel voor meer informatie.",
+    diensten:["Hypotheekadvies","Aankoop van een woning","Verduurzamen van de woning","Aanpassen van de hypotheek","Verlagen van de maandlasten","Inzicht in hypotheekrentetarieven","Gratis woningwaarderapport","Updategesprek over je hypotheek"],
+    talen:["Nederlands","Engels"],
+    erkenning:["Erkend Hypotheekadviseur","Hypothecair Planner (NVHP)"],
+    afspraak:["In de avond","In het weekend"],
+    webcam:true,
+    li:"https://www.linkedin.com/in/addynobel/",
+    fb:"https://www.facebook.com/addy.nobel",
+    tijden:[["Ma","09:00 – 17:30"],["Di","09:00 – 17:30"],["Wo","09:00 – 17:30"],["Do","09:00 – 17:30"],["Vr","09:00 – 17:30"],["Za","Op afspraak"],["Zo","Gesloten"]]
+  }
 };
-/* Laatste artikel: wordt als knop getoond op de detailpagina, mét het nummer van de planner */
-var LAATSTE_ARTIKEL = { titel: "Verduurzamen: kijk verder dan je energierekening", pad: "artikelen/2026-08-verduurzaming.html" };
-/* =============================================== */
+var LAATSTE_ARTIKEL = { titel:"Verduurzamen: kijk verder dan je energierekening", pad:"artikelen/2026-08-verduurzaming.html" };
+
+/* Plaatsen voor afstandsbepaling (uitbreidbaar). Coördinaten indicatief. */
+var PLAATSEN = {
+  "amsterdam":[52.37,4.90],"rotterdam":[51.92,4.48],"den haag":[52.08,4.30],"'s-gravenhage":[52.08,4.30],
+  "utrecht":[52.09,5.12],"eindhoven":[51.44,5.48],"groningen":[53.22,6.57],"tilburg":[51.56,5.09],
+  "almere":[52.37,5.22],"breda":[51.59,4.78],"nijmegen":[51.84,5.85],"apeldoorn":[52.21,5.97],
+  "arnhem":[51.98,5.91],"haarlem":[52.38,4.64],"enschede":[52.22,6.90],"amersfoort":[52.16,5.39],
+  "zaandam":[52.44,4.83],"zwolle":[52.51,6.09],"leiden":[52.16,4.49],"maastricht":[50.85,5.69],
+  "dordrecht":[51.81,4.67],"ede":[52.04,5.66],"leeuwarden":[53.20,5.80],"emmen":[52.78,6.90],
+  "venlo":[51.37,6.17],"deventer":[52.26,6.16],"delft":[52.01,4.36],"alkmaar":[52.63,4.75],
+  "heerlen":[50.89,5.98],"hilversum":[52.22,5.17],"amstelveen":[52.30,4.86],"hengelo":[52.27,6.79],
+  "roosendaal":[51.53,4.46],"purmerend":[52.51,4.96],"oss":[51.76,5.52],"schiedam":[51.92,4.40],
+  "lelystad":[52.51,5.47],"gouda":[52.01,4.71],"hoorn":[52.64,5.06],"almelo":[52.36,6.66],
+  "assen":[52.99,6.56],"middelburg":[51.50,3.61],"den bosch":[51.69,5.30],"'s-hertogenbosch":[51.69,5.30],
+  "zoetermeer":[52.06,4.49],"nieuwegein":[52.03,5.08],"veenendaal":[52.03,5.55],"doetinchem":[51.96,6.29],
+  "zutphen":[52.14,6.20],"lochem":[52.16,6.41],"harderwijk":[52.34,5.62],"nijkerk":[52.22,5.49],
+  "nijkerkerveen":[52.19,5.47],"barneveld":[52.14,5.58],"putten":[52.26,5.61],"ermelo":[52.30,5.62],
+  "wageningen":[51.97,5.66],"tiel":[51.89,5.43],"culemborg":[51.96,5.23],"zeist":[52.09,5.23],
+  "soest":[52.17,5.29],"baarn":[52.21,5.29],"bussum":[52.28,5.16],"huizen":[52.30,5.24],
+  "winterswijk":[51.97,6.72],"aalten":[51.93,6.58],"borculo":[52.12,6.52],"vorden":[52.10,6.31],
+  "ruurlo":[52.09,6.45],"eibergen":[52.10,6.65],"goor":[52.23,6.58],"rijssen":[52.31,6.52]
+};
+/* Postcodegebieden (eerste 2 cijfers) — indicatieve centroïden */
+var PC2 = {"10":[52.37,4.90],"11":[52.40,5.00],"12":[52.22,5.17],"13":[52.37,5.22],"14":[52.46,4.80],"15":[52.44,4.83],"16":[52.64,5.00],"17":[52.66,4.80],"18":[52.63,4.75],"19":[52.44,4.60],"20":[52.38,4.64],"21":[52.35,4.60],"22":[52.22,4.53],"23":[52.16,4.49],"24":[52.20,4.42],"25":[52.08,4.30],"26":[52.06,4.35],"27":[52.06,4.49],"28":[52.01,4.71],"29":[51.90,4.55],"30":[51.92,4.48],"31":[51.91,4.50],"32":[51.85,4.32],"33":[51.81,4.67],"34":[52.02,5.04],"35":[52.09,5.12],"36":[52.09,5.10],"37":[52.09,5.23],"38":[52.16,5.39],"39":[52.03,5.55],"40":[51.89,5.43],"41":[51.96,5.23],"42":[51.83,5.10],"43":[51.50,3.61],"44":[51.44,3.57],"45":[51.33,3.80],"46":[51.50,4.30],"47":[51.53,4.46],"48":[51.59,4.78],"49":[51.55,4.60],"50":[51.60,5.05],"51":[51.62,4.95],"52":[51.69,5.30],"53":[51.72,5.45],"54":[51.66,5.62],"55":[51.47,5.40],"56":[51.44,5.48],"57":[51.42,5.55],"58":[51.37,6.17],"59":[51.25,6.05],"60":[51.20,5.99],"61":[51.00,5.86],"62":[50.85,5.69],"63":[50.89,5.98],"64":[50.87,6.00],"65":[51.84,5.85],"66":[51.89,5.90],"67":[51.98,5.91],"68":[51.98,5.95],"69":[51.97,6.00],"70":[51.96,6.29],"71":[51.93,6.58],"72":[52.14,6.20],"73":[52.21,5.97],"74":[52.23,6.58],"75":[52.27,6.79],"76":[52.36,6.66],"77":[52.55,6.60],"78":[52.78,6.90],"79":[52.70,6.50],"80":[52.51,6.09],"81":[52.45,5.85],"82":[52.51,5.47],"83":[52.55,5.90],"84":[52.85,5.70],"85":[53.03,5.66],"86":[53.10,5.80],"87":[53.16,5.50],"88":[53.20,5.80],"89":[53.24,5.85],"90":[53.22,6.57],"91":[53.15,6.55],"92":[53.10,6.10],"93":[53.00,6.60],"94":[52.99,6.56],"95":[53.30,6.85],"96":[53.35,6.70],"97":[53.22,6.55],"98":[53.30,6.55],"99":[53.35,6.40]};
 
 function escT(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
-function initialen(naam){return naam.split(/\s+/).map(function(w){return w[0]||""}).join("").slice(0,2).toUpperCase()}
+function initialen(n){return n.split(/\s+/).map(function(w){return w[0]||""}).join("").slice(0,2).toUpperCase()}
 function avatar(p){return p.f ? '<span class="avatar"><img src="'+escT(p.f)+'" alt="'+escT(p.n)+'"></span>' : '<span class="avatar">'+escT(initialen(p.n))+'</span>'}
+function afstandKm(la1,lo1,la2,lo2){
+  var R=6371,r=Math.PI/180;
+  var dLa=(la2-la1)*r, dLo=(lo2-lo1)*r;
+  var a=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function zoekLocatie(invoer){
+  var s = invoer.trim().toLowerCase();
+  if(!s) return null;
+  var pc = s.match(/^(\d{2})\d{0,2}/);
+  if(pc && PC2[pc[1]]) return PC2[pc[1]];
+  if(PLAATSEN[s]) return PLAATSEN[s];
+  return null;
+}
 
-var lijstEl = document.getElementById('lijst');
-var detailEl = document.getElementById('detail');
-var tellerEl = document.getElementById('teller');
-var zoekEl = document.getElementById('zoek');
+var weergave = 'lijst';
+var lijstEl=document.getElementById('lijst'), kaartEl=document.getElementById('kaartpaneel'),
+    detailEl=document.getElementById('detail'), tellerEl=document.getElementById('teller');
 
-function toonLijst(){
-  detailEl.style.display = 'none';
-  lijstEl.style.display = 'block';
-  var term = zoekEl.value.trim().toLowerCase();
-  var ids = Object.keys(PLANNERS).filter(function(id){
+function zetWeergave(w){
+  weergave = w;
+  document.getElementById('wgLijst').classList.toggle('actief', w==='lijst');
+  document.getElementById('wgKaart').classList.toggle('actief', w==='kaart');
+  zoek();
+}
+
+function filterPlanners(){
+  var naam = document.getElementById('zNaam').value.trim().toLowerCase();
+  var locInvoer = document.getElementById('zPlaats').value;
+  var maxKm = parseFloat(document.getElementById('zAfstand').value);
+  var talen = Array.prototype.slice.call(document.querySelectorAll('.taalfilter:checked')).map(function(c){return c.value});
+  var loc = zoekLocatie(locInvoer);
+  var locOnbekend = locInvoer.trim() !== '' && !loc;
+  var res = [];
+  Object.keys(PLANNERS).forEach(function(id){
     var p = PLANNERS[id];
-    if(!term) return true;
-    return [p.n, p.k, p.p].filter(Boolean).join(' ').toLowerCase().indexOf(term) !== -1;
-  }).sort(function(a,b){ return PLANNERS[a].n.localeCompare(PLANNERS[b].n, 'nl'); });
-  tellerEl.style.display = 'block';
-  tellerEl.textContent = ids.length + ' planner(s) gevonden';
-  if(!ids.length){
-    lijstEl.innerHTML = '<p class="leeg">Geen planners gevonden voor deze zoekterm.<br>Probeer een (deel van een) naam, kantoor of plaats.</p>';
+    if(naam && [p.n,p.k].filter(Boolean).join(' ').toLowerCase().indexOf(naam) === -1) return;
+    if(talen.length && !talen.every(function(t){return (p.talen||[]).indexOf(t) !== -1})) return;
+    var afst = null;
+    if(loc){
+      afst = afstandKm(loc[0],loc[1],p.la,p.lo);
+      if(afst > maxKm) return;
+    } else if(locOnbekend){
+      if((p.p||'').toLowerCase().indexOf(locInvoer.trim().toLowerCase()) === -1) return;
+    }
+    res.push({id:id, p:p, afst:afst});
+  });
+  res.sort(function(a,b){
+    if(a.afst!==null && b.afst!==null) return a.afst-b.afst;
+    return a.p.n.localeCompare(b.p.n,'nl');
+  });
+  return {res:res, locOnbekend:locOnbekend};
+}
+
+function zoek(){
+  detailEl.style.display='none';
+  history.replaceState(null,'',location.pathname);
+  var uitkomst = filterPlanners();
+  var res = uitkomst.res;
+  tellerEl.style.display='block';
+  tellerEl.textContent = res.length + ' planner(s) gevonden' + (uitkomst.locOnbekend ? ' — locatie niet herkend, gezocht op plaatsnaam' : '');
+  if(weergave === 'kaart'){ lijstEl.style.display='none'; kaartEl.style.display='block'; tekenKaart(res); return; }
+  kaartEl.style.display='none'; lijstEl.style.display='block';
+  if(!res.length){
+    lijstEl.innerHTML = '<div class="leeg">Geen planners gevonden.<br>Zoektip: vul maar één van beide zoekvakken in, of vergroot het zoekgebied.</div>';
     return;
   }
-  lijstEl.innerHTML = ids.map(function(id){
-    var p = PLANNERS[id];
-    var sub = [p.k, p.p].filter(Boolean).join(' · ');
-    return '<div class="kaart" onclick="toonDetail(\''+id+'\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')toonDetail(\''+id+'\')">'
+  lijstEl.innerHTML = res.map(function(r){
+    var p = r.p;
+    var sub = [p.k, p.adres || p.p].filter(Boolean).join(' · ');
+    return '<div class="kaartje" onclick="toonDetail(\''+r.id+'\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')toonDetail(\''+r.id+'\')">'
       + avatar(p)
-      + '<div class="info"><div class="naam">'+escT(p.n)+'</div>'
-      + (sub ? '<div class="sub">'+escT(sub)+'</div>' : '')
-      + '</div><span class="pijl">›</span></div>';
+      + '<div class="info"><div class="naam">'+escT(p.n)+'</div><div class="sub">'+escT(sub)+'</div>'
+      + (r.afst!==null ? '<div class="afstandlabel">± '+Math.round(r.afst)+' km</div>' : '')
+      + '</div><span class="knop licht meer">Meer info</span></div>';
   }).join('');
+}
+
+/* Gestileerde kaart van Nederland */
+var NL = [[3.37,51.37],[3.6,51.5],[3.7,51.6],[4.0,51.8],[4.1,52.0],[4.4,52.4],[4.6,52.8],[5.0,53.0],[5.3,53.08],[5.9,53.3],[6.6,53.45],[7.0,53.35],[7.2,53.2],[7.05,52.85],[6.7,52.65],[7.05,52.4],[6.9,52.2],[6.75,52.1],[6.6,51.9],[6.4,51.85],[6.2,51.87],[6.15,51.7],[6.0,51.6],[6.2,51.5],[6.2,51.35],[6.05,51.2],[6.15,51.0],[5.9,50.85],[6.0,50.75],[5.65,50.8],[5.75,51.0],[5.55,51.1],[5.2,51.3],[4.9,51.4],[4.65,51.42],[4.55,51.48],[4.25,51.37],[3.9,51.2],[3.55,51.29]];
+function px(lo){return (lo-3.2)*100}
+function py(la){return (53.7-la)*162}
+function tekenKaart(res){
+  var svg = document.getElementById('nlkaart');
+  var pad = 'M' + NL.map(function(c){return px(c[0]).toFixed(1)+','+py(c[1]).toFixed(1)}).join(' L') + ' Z';
+  var h = '<path d="'+pad+'" fill="#ddebf6" stroke="#1c3a6e" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>';
+  res.forEach(function(r){
+    var x=px(r.p.lo), y=py(r.p.la);
+    h += '<g style="cursor:pointer" onclick="toonDetail(\''+r.id+'\')">'
+      + '<circle cx="'+x+'" cy="'+y+'" r="9" fill="#ae1932"/>'
+      + '<circle cx="'+x+'" cy="'+y+'" r="3.5" fill="#fff"/>'
+      + '<text x="'+(x+13)+'" y="'+(y+4)+'" font-size="13" font-family="Segoe UI,Arial" font-weight="700" fill="#1c3a6e">'+escT(r.p.n)+'</text></g>';
+  });
+  svg.innerHTML = h;
 }
 
 function toonDetail(id){
   var p = PLANNERS[id];
-  if(!p){ toonLijst(); return; }
-  history.replaceState(null, '', location.pathname + '?advisor=' + encodeURIComponent(id));
-  lijstEl.style.display = 'none';
-  tellerEl.style.display = 'none';
-  detailEl.style.display = 'block';
-  var sub = [p.k, p.p].filter(Boolean).join(' · ');
-  var h = '<button class="terug" onclick="history.replaceState(null,\'\',location.pathname);toonLijst()">‹ Terug naar het overzicht</button>'
-    + '<div class="top">' + avatar(p)
-    + '<div><h2>'+escT(p.n)+'</h2>' + (sub ? '<div class="sub">'+escT(sub)+'</div>' : '') + '</div></div>'
-    + '<div class="acties">';
-  if(p.t) h += '<a class="knop" href="tel:'+escT(p.t.replace(/[^+\d]/g,""))+'">Bel '+escT(p.t)+'</a>';
-  if(p.e) h += '<a class="knop licht" href="mailto:'+escT(p.e)+'">Stuur een e-mail</a>';
-  if(p.w) h += '<a class="knop licht" href="'+escT(p.w)+'" target="_blank" rel="noopener">Bekijk profiel</a>';
-  h += '</div>';
-  if(LAATSTE_ARTIKEL && LAATSTE_ARTIKEL.pad){
-    h += '<div class="acties"><a class="knop licht" href="'+escT(LAATSTE_ARTIKEL.pad)+'?advisor='+encodeURIComponent(id)+'">Lees: '+escT(LAATSTE_ARTIKEL.titel)+'</a></div>';
+  if(!p){ zoek(); return; }
+  history.replaceState(null,'',location.pathname+'?advisor='+encodeURIComponent(id));
+  lijstEl.style.display='none'; kaartEl.style.display='none'; tellerEl.style.display='none';
+  detailEl.style.display='block';
+  var links = '<div class="kolommen"><div>';
+  links += '<div class="sectie"><p>'+escT(p.intro||'')+'</p></div>';
+  if(p.diensten && p.diensten.length){
+    links += '<div class="sectie"><h3>Je kunt hier terecht voor</h3><ul>'+p.diensten.map(function(d){return '<li>'+escT(d)+'</li>'}).join('')+'</ul></div>';
   }
-  detailEl.innerHTML = h;
+  if(p.talen && p.talen.length) links += '<div class="sectie"><h3>Talen</h3>'+p.talen.map(function(t){return '<span class="tag">'+escT(t)+'</span>'}).join('')+'</div>';
+  if(p.erkenning && p.erkenning.length) links += '<div class="sectie"><h3>Erkenning</h3>'+p.erkenning.map(function(t){return '<span class="tag groen">'+escT(t)+'</span>'}).join('')+'</div>';
+  var extra = (p.afspraak||[]).slice();
+  if(p.webcam) extra.push('Webcam-advies mogelijk');
+  if(extra.length) links += '<div class="sectie"><h3>Afspraak mogelijk</h3>'+extra.map(function(t){return '<span class="tag">'+escT(t)+'</span>'}).join('')+'</div>';
+  if(LAATSTE_ARTIKEL && LAATSTE_ARTIKEL.pad){
+    links += '<div class="sectie"><h3>Laatste artikel</h3><a class="knop navy" href="'+escT(LAATSTE_ARTIKEL.pad)+'?advisor='+encodeURIComponent(id)+'">Lees: '+escT(LAATSTE_ARTIKEL.titel)+'</a></div>';
+  }
+  links += '</div><div>';
+  var c = '<div class="contactblok"><h3>Contactgegevens</h3>';
+  if(p.adres) c += '<p>⚲ '+escT(p.adres)+'</p>'; else if(p.p) c += '<p>⚲ '+escT(p.p)+'</p>';
+  if(p.w) c += '<p>🔗 <a href="'+escT(p.w)+'" target="_blank" rel="noopener">'+escT(p.w.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))+'</a></p>';
+  if(p.e) c += '<p>✉ <a href="mailto:'+escT(p.e)+'">'+escT(p.e)+'</a></p>';
+  if(p.t) c += '<p>☎ <a href="tel:'+escT(p.t.replace(/[^+\d]/g,''))+'">'+escT(p.t)+'</a></p>';
+  var soc = [];
+  if(p.li) soc.push('<a href="'+escT(p.li)+'" target="_blank" rel="noopener">LinkedIn</a>');
+  if(p.fb) soc.push('<a href="'+escT(p.fb)+'" target="_blank" rel="noopener">Facebook</a>');
+  if(soc.length) c += '<p>'+soc.join(' · ')+'</p>';
+  c += '<div class="acties">';
+  if(p.t) c += '<a class="knop" href="tel:'+escT(p.t.replace(/[^+\d]/g,''))+'">Bel direct</a>';
+  if(p.e) c += '<a class="knop navy" href="mailto:'+escT(p.e)+'">Stuur een e-mail</a>';
+  c += '</div></div>';
+  if(p.tijden && p.tijden.length){
+    c += '<div class="contactblok" style="margin-top:14px"><h3>Openingstijden</h3><table class="tijden">'
+      + p.tijden.map(function(r){return '<tr><td>'+escT(r[0])+'</td><td>'+escT(r[1])+'</td></tr>'}).join('')
+      + '</table></div>';
+  }
+  links += c + '</div></div>';
+  detailEl.innerHTML = '<button class="terug" onclick="zoek()">‹ Terug naar het overzicht</button>'
+    + '<div class="top">'+avatar(p)
+    + '<div><h2>'+escT(p.k||p.n)+'</h2>'
+    + '<div class="subtitel">'+escT(p.n)+'</div>'
+    + '<div class="plaats">'+escT(p.adres||p.p||'')+'</div></div></div>'
+    + links;
 }
 
-zoekEl.addEventListener('input', toonLijst);
+document.getElementById('zNaam').addEventListener('keydown', function(e){ if(e.key==='Enter') zoek(); });
+document.getElementById('zPlaats').addEventListener('keydown', function(e){ if(e.key==='Enter') zoek(); });
+document.querySelectorAll('.taalfilter').forEach(function(c){ c.addEventListener('change', zoek); });
 
-/* Deep link: zoeker.html?advisor=1001 opent direct de detailpagina van die planner */
 var startId = new URLSearchParams(location.search).get('advisor');
-if(startId && PLANNERS[startId]){ toonDetail(startId); } else { toonLijst(); }
+if(startId && PLANNERS[startId]){ toonDetail(startId); } else { zoek(); }
 </script>
 </body>
 </html>
