@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../fotos/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adviseursbeheer | NVHP</title>
+<style>
+:root{--primair:#1c3a6e;--primair-licht:#2a4d8f;--accent:#ae1932;--groen:#5aa987;--achtergrond:#f6f9fc;--paneel:#fff;--tekst:#22304a;--zacht:#5d6b84;--lijn:#d7e0ec;--ok:#1e7e46;--fout:#b3261e;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.6;padding-bottom:80px}
+header{background:var(--primair);color:#fff;padding:26px 20px}
+.wrap{max-width:1020px;margin:0 auto}
+header h1{font-size:1.35rem;font-weight:600}
+header p{color:#c8d6ea;font-size:.9rem;margin-top:4px;max-width:700px}
+header .lint{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+main{padding:24px 20px}
+.kaart{background:var(--paneel);border:1px solid var(--lijn);border-radius:var(--radius);box-shadow:0 1px 3px rgba(20,41,79,.08);padding:22px;margin-bottom:20px}
+.kaart h2{font-size:1rem;color:var(--primair);margin-bottom:14px;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--accent);display:inline-block;padding-bottom:3px}
+label{display:block;font-size:.8rem;font-weight:700;color:var(--zacht);margin-bottom:4px}
+input[type=text],textarea,select{width:100%;padding:9px 12px;border:1px solid var(--lijn);border-radius:8px;font-size:.9rem;font-family:inherit;background:#fff;color:var(--tekst)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--primair-licht)}
+textarea{min-height:90px;resize:vertical}
+textarea.mono{font-family:ui-monospace,Consolas,monospace;font-size:.82rem}
+.rij{display:grid;gap:14px;margin-bottom:14px}
+.rij.k2{grid-template-columns:1fr 1fr}
+.rij.k3{grid-template-columns:1fr 1fr 1fr}
+.rij.k4{grid-template-columns:1fr 1fr 1fr 1fr}
+@media(max-width:760px){.rij.k2,.rij.k3,.rij.k4{grid-template-columns:1fr}}
+.hint{font-size:.77rem;color:var(--zacht);margin-top:4px}
+.knop{display:inline-flex;align-items:center;gap:6px;background:var(--primair);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:.86rem;font-weight:600;cursor:pointer;font-family:inherit}
+.knop:hover{background:var(--primair-licht)}
+.knop.groen{background:var(--groen)}
+.knop.rood{background:var(--accent)}
+.knop.secundair{background:#e8eef6;color:var(--primair)}
+.melding{font-size:.8rem;font-weight:600;margin-top:10px;display:none}
+.melding.ok{color:var(--ok);display:block}
+.melding.fout{color:var(--fout);display:block}
+.check{display:flex;align-items:center;gap:8px;font-size:.87rem;margin-bottom:6px}
+.check input{width:auto;accent-color:var(--primair)}
+.checkgroep{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:2px 18px}
+.selectiebalk{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.selectiebalk select{max-width:380px}
+.exportbalk{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div style="background:#fff;border-bottom:1px solid #d7e0ec;padding:10px 20px"><div style="max-width:960px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap"><a href="../index.html" style="flex:none"><img src="../fotos/nvhp-logo.png" alt="NVHP - Nederlandse Vereniging van Hypothecair Planners" style="height:48px;display:block"></a><nav style="margin-left:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap"><a href="../index.html" style="color:#1c3a6e;text-decoration:none;font-weight:700;font-size:.86rem;padding-bottom:2px;">Home</a><a href="../zoeker.html" style="color:#1c3a6e;text-decoration:none;font-weight:700;font-size:.86rem;padding-bottom:2px;">Zoek een planner</a><span style="color:#d7e0ec">|</span><a href="../beheer/adviseurs.html" style="color:#5d6b84;text-decoration:none;font-weight:700;font-size:.78rem;padding-bottom:2px;border-bottom:2px solid #ae1932;border-bottom:2px solid #ae1932;">Adviseurs</a><a href="../beheer/generator.html" style="color:#5d6b84;text-decoration:none;font-weight:700;font-size:.78rem;padding-bottom:2px;border-bottom:2px solid #ae1932;">Generator</a><a href="../beheer/deellinks.html" style="color:#5d6b84;text-decoration:none;font-weight:700;font-size:.78rem;padding-bottom:2px;">Deellinks</a><a href="../beheer/handleiding.html" style="color:#5d6b84;text-decoration:none;font-weight:700;font-size:.78rem;padding-bottom:2px;">Handleiding</a></nav></div></div>
+<header>
+  <div class="wrap">
+    <span class="lint">NVHP · beheer</span>
+    <h1>Adviseursbeheer</h1>
+    <p>Beheer per adviseur alle gegevens (naar het model van de hypotheekadviseurzoeker-backend) en exporteer naar de zoeker, de artikel-generator of het dealer_import-formaat van Dutch Media Lab.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="kaart">
+    <h2>Inladen</h2>
+    <div class="rij">
+      <div>
+        <label for="importVak">Plak een dealer_import.csv (Dutch Media Lab, 29 kolommen) óf een eerder opgeslagen beheerbestand (JSON)</label>
+        <textarea id="importVak" class="mono" placeholder="Actief,Referentie,Naam,Ondertitel,… of {&quot;adviseurs&quot;:[…]}"></textarea>
+      </div>
+    </div>
+    <button class="knop secundair" onclick="importeer()">Inladen</button>
+    <p class="melding" id="meldingImport"></p>
+  </div>
+
+  <div class="kaart">
+    <h2>Adviseur kiezen</h2>
+    <div class="selectiebalk">
+      <div style="flex:1;min-width:240px">
+        <label for="keuze">Adviseur</label>
+        <select id="keuze" onchange="kies(this.value)"></select>
+      </div>
+      <button class="knop" onclick="nieuw()">+ Nieuwe adviseur</button>
+      <button class="knop rood" onclick="verwijder()">Verwijderen</button>
+    </div>
+  </div>
+
+  <form id="formulier" onsubmit="return false">
+  <div class="kaart">
+    <h2>Gegevens</h2>
+    <div class="rij k4">
+      <div><label>Actief</label><select id="f_actief"><option value="1">Ja</option><option value="0">Nee</option></select></div>
+      <div><label>Advisornummer (voor links)</label><input type="text" id="f_advnr" inputmode="numeric" placeholder="1001"></div>
+      <div><label>Referentie (intern)</label><input type="text" id="f_ref"></div>
+      <div><label>Import ID (DML)</label><input type="text" id="f_importid"></div>
+    </div>
+    <div class="rij k2">
+      <div><label>Kantoornaam (DML: Naam)</label><input type="text" id="f_kantoor" placeholder="Nobel Financieel Advies"></div>
+      <div><label>Naam adviseur</label><input type="text" id="f_naam" placeholder="Addy Nobel"></div>
+    </div>
+    <div class="rij k2">
+      <div><label>Ondertitel</label><input type="text" id="f_ondertitel" placeholder="De hypotheekadviseur uit Lochem - Addy Nobel"></div>
+      <div><label>E-mailadres</label><input type="text" id="f_email"></div>
+    </div>
+    <div class="rij k2">
+      <div><label>Telefoonnummer (getoond, met belknop)</label><input type="text" id="f_tel" placeholder="0573-763440"></div>
+      <div><label>WhatsApp-nummer (06, voor wa.me-knop)</label><input type="text" id="f_wa" placeholder="06-20761437"></div>
+    </div>
+    <div class="rij">
+      <div><label>Omschrijving (intro op de detailpagina)</label><textarea id="f_omschrijving"></textarea></div>
+    </div>
+    <div class="rij">
+      <div><label>Diensten — "Je kunt hier terecht voor" (één per regel)</label><textarea id="f_diensten" placeholder="Hypotheekadvies&#10;Aankoop van een woning"></textarea></div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <h2>Adres</h2>
+    <div class="rij k4">
+      <div><label>Straat</label><input type="text" id="f_straat"></div>
+      <div><label>Huisnummer</label><input type="text" id="f_huisnr"></div>
+      <div><label>Postcode</label><input type="text" id="f_pc"></div>
+      <div><label>Stad</label><input type="text" id="f_stad"></div>
+    </div>
+    <div class="rij k3">
+      <div><label>Land</label><input type="text" id="f_land" value="NL"></div>
+      <div><label>Breedtegraad (lat)</label><input type="text" id="f_la" placeholder="52.1586087"></div>
+      <div><label>Lengtegraad (lng)</label><input type="text" id="f_lo" placeholder="6.4142106"></div>
+    </div>
+    <p class="hint">Coördinaten zijn nodig voor de afstandszoeker en de kaartweergave. Opzoeken kan via de adresbalk van Google Maps (rechtermuisklik op de locatie).</p>
+  </div>
+
+  <div class="kaart">
+    <h2>Media</h2>
+    <div class="rij k2">
+      <div><label>Detailafbeelding / logo (DML: Detail afbeelding)</label><input type="text" id="f_lg" placeholder="../fotos/nfa-logo.png of https://…"></div>
+      <div><label>Overzichtsafbeelding / pasfoto (DML: Overzicht afbeelding)</label><input type="text" id="f_f" placeholder="../fotos/addy.jpg of https://…"></div>
+    </div>
+    <p class="hint">Voor de eigen site: upload afbeeldingen in de map fotos/ van de repository en verwijs met fotos/naam.jpg (zoeker) — de export zet paden automatisch goed.</p>
+  </div>
+
+  <div class="kaart">
+    <h2>Socials</h2>
+    <div class="rij k2">
+      <div><label>Facebook-URL</label><input type="text" id="f_fb"></div>
+      <div><label>LinkedIn-URL</label><input type="text" id="f_li"></div>
+    </div>
+    <div class="rij k3">
+      <div><label>Instagram-URL</label><input type="text" id="f_insta"></div>
+      <div><label>YouTube-URL</label><input type="text" id="f_yt"></div>
+      <div><label>WhatsApp-URL (DML-veld, optioneel)</label><input type="text" id="f_waurl"></div>
+    </div>
+    <div class="rij k2">
+      <div><label>Twitter/X-URL</label><input type="text" id="f_tw"></div>
+      <div><label>Pinterest-URL</label><input type="text" id="f_pin"></div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <h2>SEO &amp; website</h2>
+    <div class="rij k2">
+      <div><label>Eigen URL-slug (DML)</label><input type="text" id="f_slug" placeholder="nobel-financieel-advies/lochem/…"></div>
+      <div><label>Keywords</label><input type="text" id="f_keywords" placeholder="hypotheekadviseur, hypotheekadvies, …"></div>
+    </div>
+    <div class="rij k3">
+      <div><label>Website (linkicoontje)</label><input type="text" id="f_web"></div>
+      <div><label>Website meer-info-knop</label><input type="text" id="f_webinfo"></div>
+      <div><label>Website-knop op overzicht</label><select id="f_webop"><option value="0">Nee</option><option value="1">Ja</option></select></div>
+    </div>
+    <div class="rij">
+      <div><label>Externe pagina-URL (DML, geavanceerd)</label><input type="text" id="f_extern"></div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <h2>Openingstijden</h2>
+    <div class="rij k4" id="tijdenVak"></div>
+  </div>
+
+  <div class="kaart">
+    <h2>Filters</h2>
+    <div class="rij k2">
+      <div>
+        <label>Talen</label>
+        <div class="checkgroep" id="talenVak"></div>
+      </div>
+      <div>
+        <label>Erkenning</label>
+        <div class="checkgroep" id="erkenningVak"></div>
+        <label style="margin-top:12px">Afspraak mogelijk</label>
+        <div class="checkgroep" id="afspraakVak"></div>
+        <label class="check" style="margin-top:12px"><input type="checkbox" id="f_webcam"> Webcam-advies mogelijk</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <h2>Opslaan &amp; exporteren</h2>
+    <div class="exportbalk">
+      <button class="knop groen" onclick="bewaar()">Wijzigingen opslaan in lijst</button>
+      <button class="knop" onclick="exportZoeker()">Zoeker-datablok</button>
+      <button class="knop" onclick="exportGeneratorCsv()">Generator-CSV</button>
+      <button class="knop" onclick="exportDmlCsv()">dealer_import.csv (DML)</button>
+      <button class="knop secundair" onclick="exportJson()">Beheerbestand (JSON)</button>
+    </div>
+    <p class="melding" id="meldingExport"></p>
+    <div id="uitvoerWrap" style="display:none;margin-top:14px">
+      <label id="uitvoerLabel"></label>
+      <textarea id="uitvoer" class="mono" style="min-height:180px" readonly onclick="this.select()"></textarea>
+    </div>
+    <p class="hint" style="margin-top:12px">Werkwijze: wijzigingen per adviseur eerst <b>opslaan in lijst</b>, daarna exporteren. Het zoeker-datablok plak je in zoeker.html (PLANNERS-blok vervangen); de generator-CSV plak je in de artikel-generator; het beheerbestand (JSON) bewaar je zelf en laad je de volgende keer weer in — dit is je werkbestand.</p>
+  </div>
+  </form>
+
+  <p class="hint" style="border-top:1px solid var(--lijn);padding-top:12px">AVG: alles wat je exporteert naar zoeker of artikelen wordt openbaar. Neem alleen adviseurs op met vastgelegde toestemming, en alleen de velden die zij willen publiceren.</p>
+</main>
+
+<script>
+"use strict";
+var TALEN = ["Nederlands","Engels (English)","Spaans (Español)","Pools (Polski)","Duits (Deutsch)","Turks (Türkçe)","Russisch (Русский)"];
+var ERKENNING = ["Erkend Hypotheekadviseur","Hypothecair Planner (NVHP)"];
+var AFSPRAAK = ["In de avond","In het weekend"];
+var DAGEN = ["Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag","Zondag"];
+var DML_KOLOMMEN = ["Actief","Referentie","Naam","Ondertitel","E-mailadres","Telefoonnummer","Omschrijving","Straat","Huisnummer","Postcode","Stad","Land","Breedtegraad","Lengtegraad","Detail afbeelding","Overzicht afbeelding","Instagram url","Youtube url","Facebook url","Twitter url","Pinterest url","Linkedin url","Whatsapp url","Eigen url slug","Keywords","Website","Info website","Gebruik website op overzicht","Import ID"];
+
+var adviseurs = [];
+var huidig = -1;
+
+function leegRecord(){
+  return { actief:"1", advnr:"", ref:"", importid:"", kantoor:"", naam:"", ondertitel:"", email:"", tel:"", wa:"",
+    omschrijving:"", diensten:[], straat:"", huisnr:"", pc:"", stad:"", land:"NL", la:"", lo:"",
+    lg:"", f:"", fb:"", li:"", insta:"", yt:"", waurl:"", tw:"", pin:"",
+    slug:"", keywords:"", web:"", webinfo:"", webop:"0", extern:"",
+    tijden:["09:00 uur - 17:30 uur","09:00 uur - 17:30 uur","09:00 uur - 17:30 uur","09:00 uur - 17:30 uur","09:00 uur - 17:30 uur","Op afspraak","Gesloten"],
+    talen:["Nederlands"], erkenning:["Hypothecair Planner (NVHP)"], afspraak:[], webcam:false };
+}
+
+/* ---------- UI-opbouw ---------- */
+function bouwChecks(vak, opties, naamprefix){
+  document.getElementById(vak).innerHTML = opties.map(function(o,i){
+    return '<label class="check"><input type="checkbox" id="'+naamprefix+i+'" value="'+o+'"> '+o+'</label>';
+  }).join('');
+}
+bouwChecks('talenVak', TALEN, 'taal_');
+bouwChecks('erkenningVak', ERKENNING, 'erk_');
+bouwChecks('afspraakVak', AFSPRAAK, 'afs_');
+document.getElementById('tijdenVak').innerHTML = DAGEN.map(function(d,i){
+  return '<div><label>'+d+'</label><input type="text" id="tijd_'+i+'"></div>';
+}).join('');
+
+function vulKeuze(){
+  var sel = document.getElementById('keuze');
+  sel.innerHTML = adviseurs.length
+    ? adviseurs.map(function(a,i){ return '<option value="'+i+'">'+(a.advnr? a.advnr+' — ':'')+(a.naam||a.kantoor||'(naamloos)')+'</option>'; }).join('')
+    : '<option value="-1">— nog geen adviseurs —</option>';
+  if(huidig >= 0) sel.value = String(huidig);
+}
+
+function naarFormulier(a){
+  var v = function(id,w){ document.getElementById(id).value = w==null? '' : w; };
+  v('f_actief',a.actief); v('f_advnr',a.advnr); v('f_ref',a.ref); v('f_importid',a.importid);
+  v('f_kantoor',a.kantoor); v('f_naam',a.naam); v('f_ondertitel',a.ondertitel); v('f_email',a.email);
+  v('f_tel',a.tel); v('f_wa',a.wa); v('f_omschrijving',a.omschrijving);
+  v('f_diensten',(a.diensten||[]).join('\n'));
+  v('f_straat',a.straat); v('f_huisnr',a.huisnr); v('f_pc',a.pc); v('f_stad',a.stad); v('f_land',a.land);
+  v('f_la',a.la); v('f_lo',a.lo); v('f_lg',a.lg); v('f_f',a.f);
+  v('f_fb',a.fb); v('f_li',a.li); v('f_insta',a.insta); v('f_yt',a.yt); v('f_waurl',a.waurl); v('f_tw',a.tw); v('f_pin',a.pin);
+  v('f_slug',a.slug); v('f_keywords',a.keywords); v('f_web',a.web); v('f_webinfo',a.webinfo); v('f_webop',a.webop); v('f_extern',a.extern);
+  DAGEN.forEach(function(_,i){ v('tijd_'+i, (a.tijden||[])[i] || ''); });
+  TALEN.forEach(function(t,i){ document.getElementById('taal_'+i).checked = (a.talen||[]).indexOf(t) !== -1; });
+  ERKENNING.forEach(function(t,i){ document.getElementById('erk_'+i).checked = (a.erkenning||[]).indexOf(t) !== -1; });
+  AFSPRAAK.forEach(function(t,i){ document.getElementById('afs_'+i).checked = (a.afspraak||[]).indexOf(t) !== -1; });
+  document.getElementById('f_webcam').checked = !!a.webcam;
+}
+
+function uitFormulier(){
+  var g = function(id){ return document.getElementById(id).value.trim(); };
+  var a = leegRecord();
+  a.actief=g('f_actief'); a.advnr=g('f_advnr'); a.ref=g('f_ref'); a.importid=g('f_importid');
+  a.kantoor=g('f_kantoor'); a.naam=g('f_naam'); a.ondertitel=g('f_ondertitel'); a.email=g('f_email');
+  a.tel=g('f_tel'); a.wa=g('f_wa'); a.omschrijving=g('f_omschrijving');
+  a.diensten=g('f_diensten').split('\n').map(function(r){return r.trim()}).filter(Boolean);
+  a.straat=g('f_straat'); a.huisnr=g('f_huisnr'); a.pc=g('f_pc'); a.stad=g('f_stad'); a.land=g('f_land');
+  a.la=g('f_la'); a.lo=g('f_lo'); a.lg=g('f_lg'); a.f=g('f_f');
+  a.fb=g('f_fb'); a.li=g('f_li'); a.insta=g('f_insta'); a.yt=g('f_yt'); a.waurl=g('f_waurl'); a.tw=g('f_tw'); a.pin=g('f_pin');
+  a.slug=g('f_slug'); a.keywords=g('f_keywords'); a.web=g('f_web'); a.webinfo=g('f_webinfo'); a.webop=g('f_webop'); a.extern=g('f_extern');
+  a.tijden = DAGEN.map(function(_,i){ return g('tijd_'+i); });
+  a.talen = TALEN.filter(function(_,i){ return document.getElementById('taal_'+i).checked; });
+  a.erkenning = ERKENNING.filter(function(_,i){ return document.getElementById('erk_'+i).checked; });
+  a.afspraak = AFSPRAAK.filter(function(_,i){ return document.getElementById('afs_'+i).checked; });
+  a.webcam = document.getElementById('f_webcam').checked;
+  return a;
+}
+
+function kies(i){
+  i = parseInt(i,10);
+  if(isNaN(i) || i < 0 || i >= adviseurs.length) return;
+  huidig = i;
+  naarFormulier(adviseurs[i]);
+}
+function nieuw(){
+  adviseurs.push(leegRecord());
+  huidig = adviseurs.length - 1;
+  vulKeuze(); naarFormulier(adviseurs[huidig]);
+}
+function verwijder(){
+  if(huidig < 0) return;
+  if(!confirm('Deze adviseur uit de lijst verwijderen?')) return;
+  adviseurs.splice(huidig,1);
+  huidig = adviseurs.length ? 0 : -1;
+  vulKeuze();
+  if(huidig >= 0) naarFormulier(adviseurs[huidig]); else naarFormulier(leegRecord());
+}
+function bewaar(){
+  var m = document.getElementById('meldingExport');
+  m.className='melding';
+  if(huidig < 0){ adviseurs.push(leegRecord()); huidig = adviseurs.length-1; }
+  adviseurs[huidig] = uitFormulier();
+  vulKeuze();
+  m.textContent = 'Opgeslagen in de lijst ('+adviseurs.length+' adviseur(s)). Vergeet niet het beheerbestand (JSON) te downloaden als werkkopie.';
+  m.classList.add('ok');
+}
+
+/* ---------- Import ---------- */
+function parseCsv(tekst, sep){
+  var rijen=[], rij=[], veld='', q=false;
+  for(var i=0;i<tekst.length;i++){
+    var c=tekst[i];
+    if(q){ if(c==='"'){ if(tekst[i+1]==='"'){veld+='"';i++;} else q=false; } else veld+=c; }
+    else{
+      if(c==='"') q=true;
+      else if(c===sep){ rij.push(veld); veld=''; }
+      else if(c==='\n'||c==='\r'){ if(c==='\r'&&tekst[i+1]==='\n')i++; rij.push(veld); veld='';
+        if(rij.some(function(v){return v.trim()!==''})) rijen.push(rij); rij=[]; }
+      else veld+=c;
+    }
+  }
+  rij.push(veld);
+  if(rij.some(function(v){return v.trim()!==''})) rijen.push(rij);
+  return rijen;
+}
+function parseCoord(s){
+  s = String(s||'').trim().replace(/,/g,'.');
+  var delen = s.split('.');
+  if(delen.length > 2) s = delen[0] + '.' + delen.slice(1).join('');
+  var n = parseFloat(s);
+  return isNaN(n) ? '' : String(n);
+}
+function stripHtml(s){ var d=document.createElement('div'); d.innerHTML=s; return (d.textContent||'').trim(); }
+
+function importeer(){
+  var m = document.getElementById('meldingImport');
+  m.className='melding';
+  var ruw = document.getElementById('importVak').value.trim();
+  if(!ruw){ m.textContent='Plak eerst een CSV of JSON.'; m.classList.add('fout'); return; }
+  if(ruw[0] === '{' || ruw[0] === '['){
+    try{
+      var data = JSON.parse(ruw);
+      adviseurs = (data.adviseurs || data).map(function(a){ var b = leegRecord(); Object.keys(b).forEach(function(k){ if(a[k]!==undefined) b[k]=a[k]; }); return b; });
+      huidig = adviseurs.length? 0 : -1;
+      vulKeuze(); if(huidig>=0) naarFormulier(adviseurs[0]);
+      m.textContent = adviseurs.length + ' adviseur(s) ingeladen uit beheerbestand.'; m.classList.add('ok');
+    }catch(e){ m.textContent='JSON niet leesbaar: '+e.message; m.classList.add('fout'); }
+    return;
+  }
+  var eerste = ruw.split(/\r?\n/)[0];
+  var sep = (eerste.split(';').length > eerste.split(',').length) ? ';' : ',';
+  var rijen = parseCsv(ruw, sep);
+  if(rijen.length < 2){ m.textContent='CSV heeft een kopregel en minimaal één datarij nodig.'; m.classList.add('fout'); return; }
+  var kop = rijen[0].map(function(k){ return k.trim().toLowerCase(); });
+  var idx = function(naam){ return kop.indexOf(naam.toLowerCase()); };
+  var val = function(rij, naam){ var i = idx(naam); return i>=0 && rij[i]!==undefined ? String(rij[i]).trim() : ''; };
+  var nummerTeller = 1000;
+  adviseurs = rijen.slice(1).map(function(rij){
+    var a = leegRecord();
+    a.actief = val(rij,'Actief') === '0' ? '0' : '1';
+    a.ref = val(rij,'Referentie'); a.importid = val(rij,'Import ID');
+    a.kantoor = val(rij,'Naam'); a.ondertitel = val(rij,'Ondertitel');
+    var na = a.ondertitel.indexOf(' - ') !== -1 ? a.ondertitel.split(' - ').pop().trim() : '';
+    a.naam = na || a.kantoor;
+    a.email = val(rij,'E-mailadres'); a.tel = val(rij,'Telefoonnummer');
+    a.omschrijving = stripHtml(val(rij,'Omschrijving'));
+    a.straat = val(rij,'Straat'); a.huisnr = val(rij,'Huisnummer'); a.pc = val(rij,'Postcode'); a.stad = val(rij,'Stad');
+    a.land = val(rij,'Land') || 'NL';
+    a.la = parseCoord(val(rij,'Breedtegraad')); a.lo = parseCoord(val(rij,'Lengtegraad'));
+    a.lg = val(rij,'Detail afbeelding'); a.f = val(rij,'Overzicht afbeelding');
+    a.insta = val(rij,'Instagram url'); a.yt = val(rij,'Youtube url'); a.fb = val(rij,'Facebook url');
+    a.tw = val(rij,'Twitter url'); a.pin = val(rij,'Pinterest url'); a.li = val(rij,'Linkedin url'); a.waurl = val(rij,'Whatsapp url');
+    a.slug = val(rij,'Eigen url slug'); a.keywords = val(rij,'Keywords'); a.web = val(rij,'Website');
+    a.webinfo = val(rij,'Info website'); a.webop = val(rij,'Gebruik website op overzicht') === '1' ? '1' : '0';
+    var num = a.importid.match(/^\d+$/) ? a.importid : (a.ref.match(/\d{3,}/) ? a.ref.match(/\d{3,}/)[0] : String(++nummerTeller));
+    a.advnr = num;
+    return a;
+  });
+  huidig = adviseurs.length? 0 : -1;
+  vulKeuze(); if(huidig>=0) naarFormulier(adviseurs[0]);
+  m.textContent = adviseurs.length + ' adviseur(s) ingeladen uit DML-CSV. Controleer per adviseur het advisornummer, de naam en de coördinaten.';
+  m.classList.add('ok');
+}
+
+/* ---------- Export ---------- */
+function toon(label, tekst){
+  document.getElementById('uitvoerWrap').style.display='block';
+  document.getElementById('uitvoerLabel').textContent = label;
+  document.getElementById('uitvoer').value = tekst;
+  var m = document.getElementById('meldingExport');
+  m.className='melding ok'; m.textContent='Export klaar — klik in het vak om alles te selecteren en kopieer.';
+}
+function csvVeld(v){ return '"' + String(v==null?'':v).replace(/"/g,'""') + '"'; }
+function actieveAdviseurs(){ return adviseurs.filter(function(a){ return a.actief !== '0'; }); }
+
+function exportZoeker(){
+  if(!adviseurs.length) return;
+  var regels = actieveAdviseurs().map(function(a){
+    var p = { n:a.naam||a.kantoor };
+    if(a.kantoor) p.k=a.kantoor;
+    if(a.stad) p.p=a.stad;
+    var adres = [a.straat, a.huisnr].filter(Boolean).join(' ');
+    if(adres && a.pc && a.stad) p.adres = adres + ', ' + a.pc + ' ' + a.stad;
+    if(a.tel) p.t=a.tel;
+    if(a.wa) p.wa=a.wa;
+    if(a.email) p.e=a.email;
+    if(a.web || a.li) p.w = a.web || a.li;
+    if(a.f) p.f = a.f.replace(/^\.\.\//,'');
+    if(a.lg) p.lg = a.lg.replace(/^\.\.\//,'');
+    p.la = parseFloat(a.la)||0; p.lo = parseFloat(a.lo)||0;
+    if(a.omschrijving) p.intro = a.omschrijving;
+    if(a.diensten.length) p.diensten = a.diensten;
+    if(a.talen.length) p.talen = a.talen.map(function(t){ return t.split(' (')[0]; });
+    if(a.erkenning.length) p.erkenning = a.erkenning;
+    if(a.afspraak.length) p.afspraak = a.afspraak;
+    if(a.webcam) p.webcam = true;
+    if(a.li) p.li = a.li;
+    if(a.fb) p.fb = a.fb;
+    p.tijden = [["Ma"],["Di"],["Wo"],["Do"],["Vr"],["Za"],["Zo"]].map(function(d,i){ return [d[0], a.tijden[i]||'']; });
+    return '  ' + JSON.stringify(String(a.advnr)) + ': ' + JSON.stringify(p);
+  });
+  toon('Plak dit in zoeker.html (vervang daar het volledige PLANNERS-blok):',
+    'var PLANNERS = {\n' + regels.join(',\n') + '\n};');
+}
+function exportGeneratorCsv(){
+  if(!adviseurs.length) return;
+  var regels = ['id;naam;kantoor;plaats;telefoon;email;profiel;foto'];
+  actieveAdviseurs().forEach(function(a){
+    regels.push([a.advnr, a.naam||a.kantoor, a.kantoor, a.stad, a.tel, a.email, a.web||a.li, a.f?('../'+a.f.replace(/^\.\.\//,'')):''].join(';'));
+  });
+  toon('Plak dit in stap 1 van de artikel-generator:', regels.join('\n'));
+}
+function exportDmlCsv(){
+  if(!adviseurs.length) return;
+  var regels = [DML_KOLOMMEN.join(',')];
+  adviseurs.forEach(function(a){
+    regels.push([a.actief,a.ref,a.kantoor,a.ondertitel,a.email,a.tel,a.omschrijving,a.straat,a.huisnr,a.pc,a.stad,a.land,a.la,a.lo,a.lg,a.f,a.insta,a.yt,a.fb,a.tw,a.pin,a.li,a.waurl,a.slug,a.keywords,a.web,a.webinfo,a.webop,a.importid].map(csvVeld).join(','));
+  });
+  var blob = new Blob(['\uFEFF'+regels.join('\r\n')], {type:'text/csv;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var el = document.createElement('a'); el.href=url; el.download='dealer_import.csv';
+  document.body.appendChild(el); el.click(); document.body.removeChild(el);
+  URL.revokeObjectURL(url);
+  var m = document.getElementById('meldingExport');
+  m.className='melding ok'; m.textContent='dealer_import.csv gedownload ('+adviseurs.length+' adviseurs) — geschikt voor de DML-import van hypotheekadviseurzoeker.nl.';
+}
+function exportJson(){
+  var blob = new Blob([JSON.stringify({versie:1, adviseurs:adviseurs}, null, 1)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var el = document.createElement('a'); el.href=url; el.download='nvhp-adviseurs.json';
+  document.body.appendChild(el); el.click(); document.body.removeChild(el);
+  URL.revokeObjectURL(url);
+  var m = document.getElementById('meldingExport');
+  m.className='melding ok'; m.textContent='Beheerbestand gedownload. Bewaar dit — het is je werkbestand voor de volgende sessie.';
+}
+
+/* ---------- Startdata: de twee huidige planners ---------- */
+adviseurs = [
+  Object.assign(leegRecord(), { advnr:"1001", kantoor:"Oversteegen.nl", naam:"Jeroen Oversteegen",
+    ondertitel:"Hypothecair planner uit Nijkerkerveen - Jeroen Oversteegen",
+    email:"jeroen@oversteegen.nl", tel:"06-21247257", wa:"06-21247257", stad:"Nijkerkerveen",
+    la:"52.196", lo:"5.467", f:"fotos/jeroen.jpg", li:"https://www.linkedin.com/in/oversteegen/",
+    fb:"https://www.facebook.com/jeroen.oversteegen/", web:"https://www.linkedin.com/in/oversteegen/",
+    omschrijving:"Onafhankelijk hypothecair planner. Ik help je met heldere keuzes rond je hypotheek en financiële planning, afgestemd op jouw situatie en plannen.",
+    diensten:["Hypotheekadvies","Aankoop van een woning","Aanpassen van de hypotheek","Verduurzamen van de woning","Financiële planning"],
+    talen:["Nederlands","Engels (English)"], afspraak:["In de avond"], webcam:true }),
+  Object.assign(leegRecord(), { advnr:"1002", kantoor:"Nobel Financieel Advies", naam:"Addy Nobel",
+    ondertitel:"De hypotheekadviseur uit Lochem - Addy Nobel",
+    email:"info@n-fa.nl", tel:"0573-763440", wa:"06-20761437",
+    straat:"Nieuwstad", huisnr:"44", pc:"7241 DR", stad:"Lochem",
+    la:"52.1586087", lo:"6.4142106", f:"fotos/addy.jpg", lg:"fotos/nfa-logo.png",
+    li:"https://www.linkedin.com/in/addynobel/", fb:"https://www.facebook.com/addy.nobel",
+    web:"https://www.nobelfinancieeladvies.nl/",
+    slug:"nobel-financieel-advies/lochem/de-hypotheekadviseur-uit-lochem",
+    keywords:"hypotheekadviseur, hypotheekadvies, hypotheekrente, hypotheek, financieel adviseur",
+    omschrijving:"Nobel Financieel Advies is gevestigd in Lochem en adviseert onafhankelijk over alles rond de hypotheek. Neem gerust contact op met Addy Nobel voor meer informatie.",
+    diensten:["Hypotheekadvies","Aankoop van een woning","Verduurzamen van de woning","Aanpassen van de hypotheek","Verlagen van de maandlasten","Inzicht in hypotheekrentetarieven","Gratis woningwaarderapport","Updategesprek over je hypotheek"],
+    talen:["Nederlands","Engels (English)"], erkenning:["Erkend Hypotheekadviseur","Hypothecair Planner (NVHP)"],
+    afspraak:["In de avond","In het weekend"], webcam:true })
+];
+huidig = 0;
+vulKeuze();
+naarFormulier(adviseurs[0]);
+</script>
+</body>
+</html>
