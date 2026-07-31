@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVHP artikel-generator</title>
+<style>
+  :root{
+    --primair:#12284b; --primair-licht:#1d3f77; --accent:#c8a24a;
+    --achtergrond:#f4f6f9; --paneel:#fff; --tekst:#1a2333; --tekst-zacht:#5a6579;
+    --lijn:#dde3ec; --ok:#1e7e46; --fout:#b3261e; --radius:10px;
+    --schaduw:0 1px 3px rgba(18,40,75,.08),0 8px 24px rgba(18,40,75,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.5;padding-bottom:60px}
+  header{background:var(--primair);color:#fff;padding:26px 20px}
+  .wrap{max-width:980px;margin:0 auto}
+  header h1{font-size:1.35rem;font-weight:600}
+  header p{color:#c9d3e4;font-size:.9rem;margin-top:4px;max-width:680px}
+  header .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  main{padding:24px 20px}
+  .kaart{background:var(--paneel);border:1px solid var(--lijn);border-radius:var(--radius);box-shadow:var(--schaduw);padding:22px;margin-bottom:20px}
+  .kaart h2{font-size:1.02rem;color:var(--primair);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .kaart h2 .nr{background:var(--primair);color:#fff;font-size:.72rem;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  label{display:block;font-size:.82rem;font-weight:600;color:var(--tekst-zacht);margin-bottom:4px}
+  input[type=text],textarea,select{width:100%;padding:9px 12px;border:1px solid var(--lijn);border-radius:8px;font-size:.9rem;font-family:inherit;background:#fff;color:var(--tekst)}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--primair-licht);outline-offset:1px}
+  textarea{min-height:110px;resize:vertical}
+  textarea.mono{font-family:ui-monospace,Consolas,monospace;font-size:.83rem}
+  .rij{display:grid;gap:14px;margin-bottom:14px}
+  .rij.k2{grid-template-columns:1fr 1fr}
+  .rij.k3{grid-template-columns:1fr 1fr 1fr}
+  .rij.k4{grid-template-columns:1fr 1fr 1fr 1fr}
+  @media(max-width:700px){.rij.k2,.rij.k3,.rij.k4{grid-template-columns:1fr}}
+  .hint{font-size:.78rem;color:var(--tekst-zacht);margin-top:4px}
+  .knop{display:inline-flex;align-items:center;gap:6px;background:var(--primair);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit}
+  .knop:hover{background:var(--primair-licht)}
+  .knop.secundair{background:#eef1f6;color:var(--primair)}
+  .knop:disabled{opacity:.45;cursor:not-allowed}
+  .melding{font-size:.8rem;font-weight:600;margin-top:10px;display:none}
+  .melding.ok{color:var(--ok);display:block}
+  .melding.fout{color:var(--fout);display:block}
+  .check{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:6px;color:var(--tekst)}
+  .check input{width:auto}
+  iframe{width:100%;height:640px;border:1px solid var(--lijn);border-radius:var(--radius);background:#fff;margin-top:14px}
+  .voetnoot{font-size:.76rem;color:var(--tekst-zacht);margin-top:18px;border-top:1px solid var(--lijn);padding-top:12px}
+  .badge{display:inline-block;background:#eef1f6;color:var(--primair);border-radius:5px;padding:2px 8px;font-size:.75rem;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="lint">NVHP · hypothecairplanner.nl</span>
+    <h1>Artikel-generator met persoonlijk afzenderblok</h1>
+    <p>Zet een CSV met plannerdata + artikeltekst om in één kant-en-klaar HTML-bestand. De pagina toont per planner (via ?advisor=nummer) automatisch naam, kantoor, telefoonnummer en contactknop. Geen CMS of server nodig: uploaden naar de webruimte is genoeg.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="kaart">
+    <h2><span class="nr">1</span> Plannerdata (CSV)</h2>
+    <label for="csvInvoer">Plak de inhoud van het CSV-bestand (eerste regel = kolomnamen; scheidingsteken ; of , wordt automatisch herkend)</label>
+    <textarea id="csvInvoer" class="mono" placeholder="id;naam;kantoor;plaats;telefoon;email
+123;Jeroen Oversteegen;Oversteegen Advies;Nijkerk;06-12345678;jeroen@voorbeeld.nl"></textarea>
+    <div style="margin-top:10px"><button class="knop secundair" onclick="leesCsv()">Lees CSV in</button></div>
+    <p class="melding" id="meldingCsv"></p>
+    <div id="kolomMapping" style="display:none;margin-top:14px">
+      <p class="hint" style="margin-bottom:10px">Koppel de kolommen uit jouw CSV aan de velden van het afzenderblok. Alleen gekoppelde velden worden in de pagina opgenomen — laat velden die je niet wilt publiceren op "— niet gebruiken —".</p>
+      <div class="rij k4">
+        <div><label>Advisor-nummer (verplicht)</label><select id="kolId"></select></div>
+        <div><label>Naam (verplicht)</label><select id="kolNaam"></select></div>
+        <div><label>Kantoor</label><select id="kolKantoor"></select></div>
+        <div><label>Plaats</label><select id="kolPlaats"></select></div>
+      </div>
+      <div class="rij k4">
+        <div><label>Telefoonnummer</label><select id="kolTelefoon"></select></div>
+        <div><label>E-mailadres</label><select id="kolEmail"></select></div>
+        <div><label>Profiel-/website-URL</label><select id="kolProfiel"></select></div>
+        <div><label>Foto-URL</label><select id="kolFoto"></select></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <h2><span class="nr">2</span> Artikel</h2>
+    <div class="rij k2">
+      <div><label for="artTitel">Titel</label><input type="text" id="artTitel" placeholder="Verduurzaming gaat verder dan de energierekening"></div>
+      <div><label for="artDatum">Datum (zichtbaar op de pagina)</label><input type="text" id="artDatum" placeholder="augustus 2026"></div>
+    </div>
+    <div class="rij">
+      <div><label for="artIntro">Intro (1–2 zinnen, ook gebruikt als meta-omschrijving voor social previews)</label><textarea id="artIntro" placeholder="Veel huiseigenaren kijken alleen naar de energierekening, maar verduurzaming beïnvloedt ook de woningwaarde en je hypotheekmogelijkheden."></textarea></div>
+    </div>
+    <div class="rij">
+      <div>
+        <label for="artBody">Artikeltekst — lege regel = nieuwe alinea; regel beginnend met ## = tussenkop; regel beginnend met - = opsomming</label>
+        <textarea id="artBody" style="min-height:220px" placeholder="## Meer dan de energierekening
+
+Wie verduurzaamt, kijkt vaak alleen naar de maandlasten. Maar er speelt meer:
+
+- de waarde van je woning
+- je hypotheekmogelijkheden
+- je toekomstige woonlasten"></textarea>
+      </div>
+    </div>
+    <div class="rij k2">
+      <div><label for="artUrl">Definitieve URL van de pagina (optioneel — leeg laten = de pagina gebruikt automatisch de URL waarop hij draait; handig voor GitHub Pages)</label><input type="text" id="artUrl" placeholder="leeg laten voor automatisch"></div>
+      <div><label for="artZoeker">URL van de plannerzoeker (fallback zonder advisor-nummer)</label><input type="text" id="artZoeker" value="https://www.hypothecairplanner.nl/zoek-een-hypotheekadviseur-voor-het-beste-advies"></div>
+    </div>
+    <div class="rij">
+      <div><label for="artDisclaimer">Disclaimer (onderaan de pagina)</label><textarea id="artDisclaimer" style="min-height:70px">Dit artikel is met zorg samengesteld en bedoeld als algemene informatie; er kunnen geen rechten aan worden ontleend. Het vormt geen persoonlijk financieel advies. Neem voor advies dat past bij jouw situatie contact op met een hypothecair planner (NVHP).</textarea></div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <h2><span class="nr">3</span> Opties</h2>
+    <label class="check"><input type="checkbox" id="optTel" checked> Telefoonnummer tonen met belknop (tel:-link)</label>
+    <label class="check"><input type="checkbox" id="optMail" checked> Contactknop met e-mail (mailto:-link)</label>
+    <label class="check"><input type="checkbox" id="optDeel" checked> Deelknoppen (Facebook, LinkedIn, WhatsApp) die de persoonlijke link delen</label>
+    <p class="hint" style="margin-top:8px">Let op (AVG): alle aangevinkte gegevens van álle planners worden in de broncode van de pagina opgenomen en zijn daarmee openbaar. Neem alleen planners op die daarvoor toestemming hebben gegeven, en alleen de velden die zij willen publiceren.</p>
+  </div>
+
+  <div class="kaart">
+    <h2><span class="nr">4</span> Genereren</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="knop" onclick="genereer(true)">Voorbeeld tonen</button>
+      <button class="knop secundair" onclick="genereer(false)" id="knopDownload">Download artikel.html</button>
+    </div>
+    <p class="melding" id="meldingGen"></p>
+    <div id="previewWrap" style="display:none">
+      <p class="hint" style="margin-top:14px">Voorbeeld met de eerste planner uit je CSV. Test na uploaden met <span class="badge">?advisor=nummer</span> achter de URL.</p>
+      <iframe id="preview"></iframe>
+    </div>
+  </div>
+
+  <p class="voetnoot">
+    Werkwijze: 1) genereer artikel.html, 2) upload het bestand naar de webruimte van hypothecairplanner.nl (FTP of hostingpaneel), 3) mail elke planner zijn persoonlijke link (pagina-URL + ?advisor=nummer) — daarvoor gebruik je de deellink-generator of een mail merge op basis van dezelfde CSV. Bij een nieuwe ledenlijst of nieuw artikel genereer je het bestand opnieuw en overschrijf je het oude.
+  </p>
+</main>
+
+<script>
+"use strict";
+let csvData = { kolommen: [], rijen: [] };
+
+function parseCsv(tekst){
+  const eersteRegel = tekst.split(/\r?\n/)[0] || '';
+  const sep = (eersteRegel.split(';').length >= eersteRegel.split(',').length) ? ';' : ',';
+  const rijen = [];
+  let rij = [], veld = '', inQuote = false;
+  for(let i=0;i<tekst.length;i++){
+    const c = tekst[i];
+    if(inQuote){
+      if(c === '"'){ if(tekst[i+1] === '"'){ veld += '"'; i++; } else inQuote = false; }
+      else veld += c;
+    } else {
+      if(c === '"') inQuote = true;
+      else if(c === sep){ rij.push(veld); veld = ''; }
+      else if(c === '\n' || c === '\r'){
+        if(c === '\r' && tekst[i+1] === '\n') i++;
+        rij.push(veld); veld = '';
+        if(rij.some(v=>v.trim() !== '')) rijen.push(rij);
+        rij = [];
+      }
+      else veld += c;
+    }
+  }
+  rij.push(veld);
+  if(rij.some(v=>v.trim() !== '')) rijen.push(rij);
+  return rijen;
+}
+
+function leesCsv(){
+  const m = document.getElementById('meldingCsv');
+  m.className = 'melding';
+  const ruw = document.getElementById('csvInvoer').value.trim();
+  if(!ruw){ m.textContent = 'Plak eerst de CSV-inhoud.'; m.classList.add('fout'); return; }
+  const rijen = parseCsv(ruw);
+  if(rijen.length < 2){ m.textContent = 'CSV moet een kopregel én minimaal één datarij bevatten.'; m.classList.add('fout'); return; }
+  csvData.kolommen = rijen[0].map(k=>k.trim());
+  csvData.rijen = rijen.slice(1);
+  const velden = ['kolId','kolNaam','kolKantoor','kolPlaats','kolTelefoon','kolEmail','kolProfiel','kolFoto'];
+  const gok = {
+    kolId:['id','advisor','nummer','lidnummer','adviseurnummer'], kolNaam:['naam','name','adviseur','planner'],
+    kolKantoor:['kantoor','bedrijf','organisatie','company'], kolPlaats:['plaats','stad','woonplaats','vestigingsplaats','city'],
+    kolTelefoon:['telefoon','tel','telefoonnummer','mobiel','phone'], kolEmail:['email','e-mail','mail','emailadres'],
+    kolProfiel:['profiel','website','url','link'], kolFoto:['foto','photo','afbeelding','image']
+  };
+  velden.forEach(v=>{
+    const sel = document.getElementById(v);
+    sel.innerHTML = '<option value="-1">— niet gebruiken —</option>' +
+      csvData.kolommen.map((k,i)=>'<option value="'+i+'">'+escHtml(k)+'</option>').join('');
+    const idx = csvData.kolommen.findIndex(k => gok[v].includes(k.toLowerCase()));
+    if(idx >= 0) sel.value = String(idx);
+  });
+  document.getElementById('kolomMapping').style.display = 'block';
+  m.textContent = csvData.rijen.length + ' planner(s) ingelezen, ' + csvData.kolommen.length + ' kolommen herkend. Controleer de koppeling hieronder.';
+  m.classList.add('ok');
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function kol(veld, rij){
+  const i = parseInt(document.getElementById(veld).value, 10);
+  return (i >= 0 && rij[i] !== undefined) ? String(rij[i]).trim() : '';
+}
+
+function bodyNaarHtml(tekst){
+  const blokken = tekst.split(/\n\s*\n/);
+  return blokken.map(blok=>{
+    const regels = blok.split('\n').map(r=>r.trim()).filter(Boolean);
+    if(!regels.length) return '';
+    if(regels.every(r=>r.startsWith('- ')))
+      return '<ul>' + regels.map(r=>'<li>'+escHtml(r.slice(2))+'</li>').join('') + '</ul>';
+    return regels.map(r=> r.startsWith('## ') ? '<h2>'+escHtml(r.slice(3))+'</h2>' : '<p>'+escHtml(r)+'</p>').join('');
+  }).join('\n');
+}
+
+function genereer(alleenPreview){
+  const m = document.getElementById('meldingGen');
+  m.className = 'melding';
+  if(!csvData.rijen.length){ m.textContent = 'Lees eerst de CSV in (stap 1).'; m.classList.add('fout'); return; }
+  if(document.getElementById('kolId').value === '-1' || document.getElementById('kolNaam').value === '-1'){
+    m.textContent = 'Koppel minimaal de kolommen voor advisor-nummer en naam.'; m.classList.add('fout'); return;
+  }
+  const titel = document.getElementById('artTitel').value.trim();
+  if(!titel){ m.textContent = 'Vul een artikeltitel in (stap 2).'; m.classList.add('fout'); return; }
+
+  const toonTel = document.getElementById('optTel').checked;
+  const toonMail = document.getElementById('optMail').checked;
+  const toonDeel = document.getElementById('optDeel').checked;
+
+  const planners = {};
+  const dubbel = [];
+  csvData.rijen.forEach(rij=>{
+    const id = kol('kolId', rij);
+    if(!id) return;
+    if(planners[id]) dubbel.push(id);
+    const p = { n: kol('kolNaam', rij) };
+    const k = kol('kolKantoor', rij); if(k) p.k = k;
+    const pl = kol('kolPlaats', rij); if(pl) p.p = pl;
+    if(toonTel){ const t = kol('kolTelefoon', rij); if(t) p.t = t; }
+    if(toonMail){ const e = kol('kolEmail', rij); if(e) p.e = e; }
+    const w = kol('kolProfiel', rij); if(w) p.w = w;
+    const f = kol('kolFoto', rij); if(f) p.f = f;
+    planners[id] = p;
+  });
+
+  const html = bouwArtikelHtml({
+    titel,
+    datum: document.getElementById('artDatum').value.trim(),
+    intro: document.getElementById('artIntro').value.trim(),
+    bodyHtml: bodyNaarHtml(document.getElementById('artBody').value),
+    url: document.getElementById('artUrl').value.trim(),
+    zoeker: document.getElementById('artZoeker').value.trim(),
+    disclaimer: document.getElementById('artDisclaimer').value.trim(),
+    planners, toonDeel
+  });
+
+  if(alleenPreview){
+    const eersteId = Object.keys(planners)[0] || '';
+    document.getElementById('previewWrap').style.display = 'block';
+    const frame = document.getElementById('preview');
+    frame.srcdoc = html.replace('/*PREVIEW_ADVISOR*/', 'advisorId = ' + JSON.stringify(eersteId) + ';');
+    m.textContent = 'Voorbeeld gegenereerd met planner ' + eersteId + '.' + (dubbel.length ? ' Let op: dubbele nummers in CSV: ' + dubbel.join(', ') : '');
+  } else {
+    const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'artikel.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    m.textContent = 'artikel.html gedownload (' + Object.keys(planners).length + ' planners ingesloten). Upload het bestand naar de webruimte.' + (dubbel.length ? ' Let op: dubbele nummers: ' + dubbel.join(', ') : '');
+  }
+  m.classList.add(dubbel.length ? 'fout' : 'ok');
+}
+
+function bouwArtikelHtml(a){
+  const dataJson = JSON.stringify(a.planners).replace(/<\/script/gi, '<\\/script');
+  return '<!DOCTYPE html>\n<html lang="nl">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+  + '<title>' + escHtml(a.titel) + ' | NVHP</title>\n'
+  + '<meta name="description" content="' + escHtml(a.intro) + '">\n'
+  + '<meta property="og:title" content="' + escHtml(a.titel) + '">\n'
+  + '<meta property="og:description" content="' + escHtml(a.intro) + '">\n'
+  + (a.url ? '<meta property="og:url" content="' + escHtml(a.url) + '">\n' : '')
+  + '<style>\n'
+  + ':root{--primair:#12284b;--accent:#c8a24a;--tekst:#1a2333;--zacht:#5a6579;--lijn:#dde3ec}\n'
+  + '*{box-sizing:border-box;margin:0;padding:0}\n'
+  + 'body{font-family:Georgia,"Times New Roman",serif;color:var(--tekst);line-height:1.65;background:#fff}\n'
+  + '.kop{background:var(--primair);color:#fff;padding:34px 20px;font-family:"Segoe UI",system-ui,Arial,sans-serif}\n'
+  + '.wrap{max-width:720px;margin:0 auto;padding:0 20px}\n'
+  + '.kop .wrap{padding:0}.kop .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px}\n'
+  + 'h1{font-size:1.7rem;line-height:1.25;font-weight:700}\n'
+  + '.datum{color:#c9d3e4;font-size:.85rem;margin-top:8px}\n'
+  + '.afzender{font-family:"Segoe UI",system-ui,Arial,sans-serif;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;margin:26px 0;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#f8f9fc}\n'
+  + '.afzender img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none}\n'
+  + '.afzender .info{flex:1;min-width:200px}\n'
+  + '.afzender .rol{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--zacht);font-weight:700}\n'
+  + '.afzender .naam{font-size:1.05rem;font-weight:700;color:var(--primair)}\n'
+  + '.afzender .sub{font-size:.85rem;color:var(--zacht)}\n'
+  + '.afzender .acties{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}\n'
+  + '.knop{display:inline-block;background:var(--primair);color:#fff;text-decoration:none;font-size:.82rem;font-weight:600;padding:7px 14px;border-radius:6px}\n'
+  + '.knop.licht{background:#e8ecf3;color:var(--primair)}\n'
+  + 'article{padding:10px 0 30px}\n'
+  + 'article p{margin:0 0 16px}article h2{font-family:"Segoe UI",system-ui,Arial,sans-serif;font-size:1.15rem;color:var(--primair);margin:26px 0 10px}\n'
+  + 'article ul{margin:0 0 16px 22px}article li{margin-bottom:6px}\n'
+  + '.intro{font-size:1.08rem;color:var(--zacht);font-style:italic;margin:22px 0 6px}\n'
+  + '.deel{font-family:"Segoe UI",system-ui,Arial,sans-serif;border-top:1px solid var(--lijn);padding:18px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}\n'
+  + '.deel b{font-size:.85rem;color:var(--primair);margin-right:6px}\n'
+  + '.disclaimer{font-family:"Segoe UI",system-ui,Arial,sans-serif;font-size:.75rem;color:var(--zacht);border-top:1px solid var(--lijn);padding:16px 0 40px;font-style:italic}\n'
+  + '</style>\n</head>\n<body>\n'
+  + '<div class="kop"><div class="wrap"><span class="lint">NVHP consumentenartikel</span><h1>' + escHtml(a.titel) + '</h1>'
+  + (a.datum ? '<p class="datum">' + escHtml(a.datum) + '</p>' : '') + '</div></div>\n'
+  + '<div class="wrap">\n'
+  + (a.intro ? '<p class="intro">' + escHtml(a.intro) + '</p>\n' : '')
+  + '<div class="afzender" id="afzender"></div>\n'
+  + '<article>\n' + a.bodyHtml + '\n</article>\n'
+  + (a.toonDeel ? '<div class="deel" id="deel"><b>Deel dit artikel:</b></div>\n' : '')
+  + (a.disclaimer ? '<p class="disclaimer">' + escHtml(a.disclaimer) + '</p>\n' : '')
+  + '</div>\n<script>\n'
+  + 'var PLANNERS = ' + dataJson + ';\n'
+  + 'var ZOEKER = ' + JSON.stringify(a.zoeker || '') + ';\n'
+  + 'var PAGINA_URL = ' + JSON.stringify(a.url || '') + ';\n'
+  + 'function escT(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}\n'
+  + 'var advisorId = new URLSearchParams(location.search).get("advisor") || "";\n'
+  + '/*PREVIEW_ADVISOR*/\n'
+  + 'var p = PLANNERS[advisorId];\n'
+  + 'var blok = document.getElementById("afzender");\n'
+  + 'if(p){\n'
+  + '  var h = "";\n'
+  + '  if(p.f) h += \'<img src="\'+escT(p.f)+\'" alt="\'+escT(p.n)+\'">\';\n'
+  + '  h += \'<div class="info"><div class="rol">Dit artikel wordt je aangeboden door</div><div class="naam">\'+escT(p.n)+\'</div>\';\n'
+  + '  var sub = [p.k, p.p].filter(Boolean).join(", ");\n'
+  + '  if(sub) h += \'<div class="sub">\'+escT(sub)+\'</div>\';\n'
+  + '  h += \'<div class="acties">\';\n'
+  + '  if(p.t) h += \'<a class="knop" href="tel:\'+escT(p.t.replace(/[^+\\d]/g,""))+\'">Bel \'+escT(p.t)+\'</a>\';\n'
+  + '  if(p.e) h += \'<a class="knop licht" href="mailto:\'+escT(p.e)+\'">Stuur een e-mail</a>\';\n'
+  + '  if(p.w) h += \'<a class="knop licht" href="\'+escT(p.w)+\'" target="_blank" rel="noopener">Bekijk profiel</a>\';\n'
+  + '  h += "</div></div>";\n'
+  + '  blok.innerHTML = h;\n'
+  + '} else if(ZOEKER){\n'
+  + '  blok.innerHTML = \'<div class="info"><div class="rol">NVHP</div><div class="naam">Vind een hypothecair planner bij jou in de buurt</div><div class="acties"><a class="knop" href="\'+escT(ZOEKER)+\'">Zoek een planner</a></div></div>\';\n'
+  + '} else { blok.style.display = "none"; }\n'
+  + 'var deel = document.getElementById("deel");\n'
+  + 'if(deel){\n'
+  + '  var basis = PAGINA_URL || (location.origin + location.pathname);\n'
+  + '  var mijnUrl = basis + (advisorId ? "?advisor=" + encodeURIComponent(advisorId) : "");\n'
+  + '  var enc = encodeURIComponent(mijnUrl);\n'
+  + '  deel.innerHTML += \'<a class="knop licht" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=\'+enc+\'">Facebook</a>\'\n'
+  + '    + \'<a class="knop licht" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=\'+enc+\'">LinkedIn</a>\'\n'
+  + '    + \'<a class="knop licht" target="_blank" rel="noopener" href="https://wa.me/?text=\'+enc+\'">WhatsApp</a>\';\n'
+  + '}\n'
+  + '<\/script>\n</body>\n</html>';
+}
+</script>
+</body>
+</html>

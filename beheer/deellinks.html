@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVHP deellink-generator</title>
+<style>
+  /* ===== Huisstijl (NVHP-stijl; pas hier aan voor andere huisstijl) ===== */
+  :root{
+    --primair:#12284b;        /* donkerblauw */
+    --primair-licht:#1d3f77;
+    --accent:#c8a24a;         /* goud-accent */
+    --achtergrond:#f4f6f9;
+    --paneel:#ffffff;
+    --tekst:#1a2333;
+    --tekst-zacht:#5a6579;
+    --lijn:#dde3ec;
+    --ok:#1e7e46;
+    --fout:#b3261e;
+    --radius:10px;
+    --schaduw:0 1px 3px rgba(18,40,75,.08),0 8px 24px rgba(18,40,75,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.5;padding-bottom:60px}
+  header{background:var(--primair);color:#fff;padding:26px 20px}
+  .wrap{max-width:960px;margin:0 auto}
+  header h1{font-size:1.35rem;font-weight:600;letter-spacing:.2px}
+  header p{color:#c9d3e4;font-size:.9rem;margin-top:4px;max-width:640px}
+  header .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  main{padding:24px 20px}
+  .kaart{background:var(--paneel);border:1px solid var(--lijn);border-radius:var(--radius);box-shadow:var(--schaduw);padding:22px;margin-bottom:20px}
+  .kaart h2{font-size:1.02rem;color:var(--primair);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .kaart h2 .nr{background:var(--primair);color:#fff;font-size:.72rem;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  label{display:block;font-size:.82rem;font-weight:600;color:var(--tekst-zacht);margin-bottom:4px}
+  input[type=text],textarea{width:100%;padding:10px 12px;border:1px solid var(--lijn);border-radius:8px;font-size:.92rem;font-family:inherit;background:#fff;color:var(--tekst)}
+  input[type=text]:focus,textarea:focus{outline:2px solid var(--primair-licht);outline-offset:1px;border-color:var(--primair-licht)}
+  textarea{min-height:110px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:.85rem}
+  .rij{display:grid;gap:14px;margin-bottom:14px}
+  .rij.k2{grid-template-columns:2fr 1fr}
+  .rij.k3{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:640px){.rij.k2,.rij.k3{grid-template-columns:1fr}}
+  .hint{font-size:.78rem;color:var(--tekst-zacht);margin-top:4px}
+  .tabs{display:flex;gap:0;border-bottom:2px solid var(--lijn);margin-bottom:20px}
+  .tab{background:none;border:none;padding:10px 18px;font-size:.92rem;font-weight:600;color:var(--tekst-zacht);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;font-family:inherit}
+  .tab.actief{color:var(--primair);border-bottom-color:var(--accent)}
+  .knop{display:inline-flex;align-items:center;gap:6px;background:var(--primair);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit}
+  .knop:hover{background:var(--primair-licht)}
+  .knop.secundair{background:#eef1f6;color:var(--primair)}
+  .knop.secundair:hover{background:#e2e8f2}
+  .knop.klein{padding:5px 10px;font-size:.78rem;border-radius:6px}
+  .resultaat{border:1px solid var(--lijn);border-radius:8px;padding:14px;margin-top:10px;background:#fafbfd}
+  .resultaat .kop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+  .resultaat .kop b{font-size:.85rem;color:var(--primair)}
+  .link{font-family:ui-monospace,Consolas,monospace;font-size:.8rem;word-break:break-all;color:var(--tekst);background:#fff;border:1px solid var(--lijn);border-radius:6px;padding:8px 10px}
+  .acties{display:flex;gap:6px;flex-wrap:wrap;flex:none}
+  .melding{font-size:.8rem;font-weight:600;margin-top:10px;display:none}
+  .melding.ok{color:var(--ok);display:block}
+  .melding.fout{color:var(--fout);display:block}
+  table{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--lijn);vertical-align:top}
+  th{color:var(--tekst-zacht);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+  td .link{margin-top:4px}
+  .badge{display:inline-block;background:#eef1f6;color:var(--primair);border-radius:5px;padding:2px 8px;font-size:.75rem;font-weight:700}
+  .voetnoot{font-size:.76rem;color:var(--tekst-zacht);margin-top:18px;border-top:1px solid var(--lijn);padding-top:12px}
+  .verborgen{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="lint">NVHP · plannerstool</span>
+    <h1>Deellink-generator consumentenartikelen</h1>
+    <p>Maak per adviseur een persoonlijke artikellink (advisor-parameter + UTM-tags) en directe deellinks voor Facebook, LinkedIn, WhatsApp en e-mail.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="tabs">
+    <button class="tab actief" id="tabEnkel" onclick="wisselTab('enkel')">Eén adviseur</button>
+    <button class="tab" id="tabBulk" onclick="wisselTab('bulk')">Bulk (meerdere adviseurs)</button>
+  </div>
+
+  <!-- Stap 1: artikel -->
+  <div class="kaart">
+    <h2><span class="nr">1</span> Artikel</h2>
+    <div class="rij">
+      <div>
+        <label for="artikelUrl">Artikel-URL (jouw gepubliceerde artikelpagina)</label>
+        <input type="text" id="artikelUrl" placeholder="https://jouwnaam.github.io/nvhp-artikelen/artikelen/2026-08-verduurzaming.html" value="">
+        <p class="hint">Bestaande advisor- en utm-parameters in de geplakte URL worden automatisch verwijderd en opnieuw opgebouwd.</p>
+      </div>
+    </div>
+    <div class="rij">
+      <div>
+        <label for="artikelTitel">Artikeltitel (voor e-mailonderwerp)</label>
+        <input type="text" id="artikelTitel" value="Verduurzaming gaat verder dan energierekening">
+      </div>
+    </div>
+    <div class="rij k3">
+      <div>
+        <label for="utmCampagne">utm_campaign</label>
+        <input type="text" id="utmCampagne" value="nvhp-artikel-2026-08">
+      </div>
+      <div>
+        <label for="utmSource">utm_source (basislink)</label>
+        <input type="text" id="utmSource" value="adviseur">
+      </div>
+      <div>
+        <label for="utmMedium">utm_medium (basislink)</label>
+        <input type="text" id="utmMedium" value="direct">
+      </div>
+    </div>
+    <p class="hint">Voor de sociale deellinks wordt utm_source automatisch per kanaal gezet (facebook, linkedin, whatsapp, email) met utm_medium=social of email.</p>
+  </div>
+
+  <!-- E-mailsjablonen -->
+  <div class="kaart">
+    <h2><span class="nr">✉</span> E-mailsjablonen</h2>
+    <p class="hint" style="margin-bottom:12px">Beschikbare velden: <span class="badge">{naam}</span> <span class="badge">{artikel}</span> <span class="badge">{link}</span> — worden per adviseur automatisch ingevuld.</p>
+    <div class="rij k2">
+      <div>
+        <label for="sjbAanOnderwerp">Aankondiging — onderwerp</label>
+        <input type="text" id="sjbAanOnderwerp" value="Jouw persoonlijke artikel '{artikel}' staat klaar">
+        <label for="sjbAanBody" style="margin-top:10px">Aankondiging — tekst</label>
+        <textarea id="sjbAanBody">Beste {naam},
+
+Jouw persoonlijke NVHP-consumentenartikel '{artikel}' staat live:
+
+{link}
+
+Deel de link via je eigen kanalen: social media, nieuwsbrief of rechtstreeks met relaties. Wanneer je jouw persoonlijke link gebruikt, verschijn jij als afzender van het artikel.
+
+Met vriendelijke groet,</textarea>
+      </div>
+      <div>
+        <label for="sjbHerOnderwerp">Herinnering — onderwerp</label>
+        <input type="text" id="sjbHerOnderwerp" value="Herinnering: jouw persoonlijke artikel '{artikel}' staat klaar">
+        <label for="sjbHerBody" style="margin-top:10px">Herinnering — tekst</label>
+        <textarea id="sjbHerBody">Beste {naam},
+
+Mogelijk heb je de eerdere mail gemist: jouw persoonlijke NVHP-consumentenartikel '{artikel}' staat klaar om te delen.
+
+Dit is jouw persoonlijke link:
+{link}
+
+Delen kan direct via Facebook of LinkedIn, of neem de link op in je eigen nieuwsbrief.
+
+Met vriendelijke groet,</textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enkel -->
+  <section id="paneelEnkel">
+    <div class="kaart">
+      <h2><span class="nr">2</span> Adviseur</h2>
+      <div class="rij k3">
+        <div>
+          <label for="advNaam">Naam (voor e-mailtekst)</label>
+          <input type="text" id="advNaam" placeholder="Jeroen Oversteegen">
+        </div>
+        <div>
+          <label for="advEmail">E-mailadres (optioneel)</label>
+          <input type="text" id="advEmail" placeholder="jeroen@voorbeeld.nl">
+        </div>
+        <div>
+          <label for="advNr">Advisor-nummer</label>
+          <input type="text" id="advNr" placeholder="6296" inputmode="numeric">
+          <p class="hint">Het advisor-nummer uit de ledenlijst (CSV) — hetzelfde nummer dat in de artikelpagina is ingesloten.</p>
+        </div>
+      </div>
+      <button class="knop" onclick="genereerEnkel()">Genereer links</button>
+      <p class="melding" id="meldingEnkel"></p>
+      <div id="uitvoerEnkel"></div>
+    </div>
+  </section>
+
+  <!-- Bulk -->
+  <section id="paneelBulk" class="verborgen">
+    <div class="kaart">
+      <h2><span class="nr">2</span> Adviseurslijst</h2>
+      <label for="bulkInvoer">Eén adviseur per regel: <span class="badge">Naam;Advisornummer</span> of <span class="badge">Naam;Advisornummer;E-mail</span></label>
+      <textarea id="bulkInvoer" placeholder="Jeroen Oversteegen;6296;jeroen@voorbeeld.nl
+Marielle Mulder;6301
+Kris Verschuur;6318;kris@voorbeeld.nl"></textarea>
+      <p class="hint">De adviseursdata (naam + advisornummer) exporteer je zelf uit de NVHP-database op hypothecairplanner.nl en plak je hier als tekst — de tool haalt zelf geen externe data op.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="knop" onclick="genereerBulk()">Genereer tabel</button>
+        <button class="knop secundair" onclick="downloadCsv()" id="knopCsv" disabled>Download CSV</button>
+        <button class="knop secundair" onclick="kopieerAlles()" id="knopAlles" disabled>Kopieer alle persoonlijke links</button>
+      </div>
+      <p class="melding" id="meldingBulk"></p>
+      <div id="uitvoerBulk"></div>
+    </div>
+  </section>
+
+  <p class="voetnoot">
+    De tool bouwt links in het formaat <code>?advisor=nummer</code> en opent deelvensters via window.open. Facebook en LinkedIn tonen zelf de titel en omschrijving op basis van de meta-tags van de artikelpagina.
+    Let op (compliance): spreek met de planners af dat zij bij het delen alleen het intro overnemen met doorlink naar hun persoonlijke artikellink, en geen eigen claims aan het artikel toevoegen; de artikelen zijn openbare informatieve uitingen onder de Wft-informatienormen.
+  </p>
+</main>
+
+<script>
+"use strict";
+let bulkData = [];
+
+function wisselTab(naam){
+  document.getElementById('tabEnkel').classList.toggle('actief', naam==='enkel');
+  document.getElementById('tabBulk').classList.toggle('actief', naam==='bulk');
+  document.getElementById('paneelEnkel').classList.toggle('verborgen', naam!=='enkel');
+  document.getElementById('paneelBulk').classList.toggle('verborgen', naam!=='bulk');
+}
+
+function schoonUrl(ruw){
+  let u;
+  try { u = new URL(ruw.trim()); } catch(e){ return null; }
+  ['advisor','utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(p=>u.searchParams.delete(p));
+  return u;
+}
+
+function bouwLinks(advNr){
+  const basis = schoonUrl(document.getElementById('artikelUrl').value);
+  if(!basis) return null;
+  const camp = document.getElementById('utmCampagne').value.trim();
+  const maak = (source, medium)=>{
+    const u = new URL(basis.href);
+    u.searchParams.set('advisor', advNr);
+    if(source) u.searchParams.set('utm_source', source);
+    if(medium) u.searchParams.set('utm_medium', medium);
+    if(camp) u.searchParams.set('utm_campaign', camp);
+    return u.href;
+  };
+  const persoonlijk = maak(document.getElementById('utmSource').value.trim(), document.getElementById('utmMedium').value.trim());
+  const fbDoel = maak('facebook','social');
+  const liDoel = maak('linkedin','social');
+  const waDoel = maak('whatsapp','social');
+  const mailDoel = maak('email','email');
+  return {
+    advNr,
+    persoonlijk,
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(fbDoel),
+    linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(liDoel),
+    whatsapp: 'https://wa.me/?text=' + encodeURIComponent(waDoel),
+    mailDoel
+  };
+}
+
+function valideerNr(nr){ return /^\d{1,10}$/.test(nr); }
+
+function knopjes(l, naam, email){
+  return '<div class="acties">'
+    + '<button class="knop klein secundair" onclick="kopieer(this)" data-link="'+esc(l.persoonlijk)+'">Kopieer link</button>'
+    + '<button class="knop klein secundair" onclick="testLink(this)" data-link="'+esc(l.persoonlijk)+'" title="Opent de link in een nieuw tabblad; controleer of ?advisor= in de adresbalk blijft staan en of jouw gegevens op de pagina verschijnen">⚲ Test link</button>'
+    + '<button class="knop klein" onclick="openVenster(this)" data-link="'+esc(l.facebook)+'">Facebook</button>'
+    + '<button class="knop klein" onclick="openVenster(this)" data-link="'+esc(l.linkedin)+'">LinkedIn</button>'
+    + '<button class="knop klein" onclick="openVenster(this)" data-link="'+esc(l.whatsapp)+'">WhatsApp</button>'
+    + '<button class="knop klein secundair" onclick="stuurMail(this,\'aan\')" data-naam="'+esc(naam||'')+'" data-email="'+esc(email||'')+'" data-link="'+esc(l.mailDoel)+'">✉ Mail adviseur</button>'
+    + '<button class="knop klein secundair" onclick="stuurMail(this,\'her\')" data-naam="'+esc(naam||'')+'" data-email="'+esc(email||'')+'" data-link="'+esc(l.mailDoel)+'">↺ Herinnering</button>'
+    + '</div>';
+}
+
+function vulSjabloon(tekst, naam, link){
+  return tekst
+    .split('{naam}').join(naam || 'collega')
+    .split('{artikel}').join(document.getElementById('artikelTitel').value.trim())
+    .split('{link}').join(link);
+}
+
+function stuurMail(el, type){
+  const p = type === 'her' ? 'sjbHer' : 'sjbAan';
+  const onderwerp = vulSjabloon(document.getElementById(p+'Onderwerp').value, el.dataset.naam, el.dataset.link);
+  const body = vulSjabloon(document.getElementById(p+'Body').value, el.dataset.naam, el.dataset.link);
+  const mailto = 'mailto:' + encodeURIComponent(el.dataset.email || '')
+    + '?subject=' + encodeURIComponent(onderwerp)
+    + '&body=' + encodeURIComponent(body);
+  window.open(mailto, '_blank', 'noopener');
+}
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function openVenster(el){ window.open(el.dataset.link, '_blank', 'noopener,width=700,height=600'); }
+
+function testLink(el){
+  window.open(el.dataset.link, '_blank', 'noopener');
+  const bestaand = document.getElementById('testChecklist');
+  if(bestaand) bestaand.remove();
+  const div = document.createElement('div');
+  div.id = 'testChecklist';
+  div.className = 'resultaat';
+  div.innerHTML = '<div class="kop"><b>Controleer in het geopende tabblad:</b>'
+    + '<div class="acties"><button class="knop klein secundair" onclick="this.closest(\'#testChecklist\').remove()">Sluiten</button></div></div>'
+    + '<p class="hint" style="margin-top:6px">1. Staat <b>?advisor=…</b> nog in de adresbalk (ook na volledig laden)?<br>'
+    + '2. Verschijnen jouw naam en contactgegevens op de pagina als afzender?<br>'
+    + '3. Kloppen naam, telefoonnummer en contactknoppen in het afzenderblok? Aanpassen kan via de CSV + opnieuw genereren.<br>'
+    + 'Let op: de social-preview (titel/afbeelding) is voor alle adviseurs identiek; alleen de link zelf bevat jouw advisor-nummer. Test daarom ook één keer een gedeelde Facebook/LinkedIn-post: klik erop en controleer of het advisor-nummer behouden blijft.</p>';
+  el.closest('.resultaat, td').appendChild(div);
+}
+
+function kopieer(el){
+  const tekst = el.dataset.link;
+  const klaar = ()=>{ const oud = el.textContent; el.textContent='Gekopieerd ✓'; setTimeout(()=>el.textContent=oud,1500); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(tekst).then(klaar).catch(()=>fallbackKopie(tekst, klaar));
+  } else { fallbackKopie(tekst, klaar); }
+}
+function fallbackKopie(tekst, cb){
+  const ta = document.createElement('textarea');
+  ta.value = tekst; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+function genereerEnkel(){
+  const m = document.getElementById('meldingEnkel');
+  m.className = 'melding';
+  const nr = document.getElementById('advNr').value.trim();
+  if(!schoonUrl(document.getElementById('artikelUrl').value)){ m.textContent='Ongeldige artikel-URL.'; m.classList.add('fout'); return; }
+  if(!valideerNr(nr)){ m.textContent='Vul een geldig advisor-nummer in (alleen cijfers).'; m.classList.add('fout'); return; }
+  const naam = document.getElementById('advNaam').value.trim();
+  const email = document.getElementById('advEmail').value.trim();
+  const l = bouwLinks(nr);
+  document.getElementById('uitvoerEnkel').innerHTML =
+    '<div class="resultaat"><div class="kop"><b>Persoonlijke artikellink' + (naam? ' — '+esc(naam):'') + '</b>' + knopjes(l, naam, email) + '</div>'
+    + '<div class="link">'+esc(l.persoonlijk)+'</div></div>'
+    + '<div class="resultaat"><div class="kop"><b>Facebook-deellink</b><div class="acties"><button class="knop klein secundair" onclick="kopieer(this)" data-link="'+esc(l.facebook)+'">Kopieer</button></div></div><div class="link">'+esc(l.facebook)+'</div></div>'
+    + '<div class="resultaat"><div class="kop"><b>LinkedIn-deellink</b><div class="acties"><button class="knop klein secundair" onclick="kopieer(this)" data-link="'+esc(l.linkedin)+'">Kopieer</button></div></div><div class="link">'+esc(l.linkedin)+'</div></div>';
+  m.textContent = 'Links gegenereerd.'; m.classList.add('ok');
+}
+
+function genereerBulk(){
+  const m = document.getElementById('meldingBulk');
+  m.className = 'melding';
+  if(!schoonUrl(document.getElementById('artikelUrl').value)){ m.textContent='Ongeldige artikel-URL.'; m.classList.add('fout'); return; }
+  const regels = document.getElementById('bulkInvoer').value.split(/\r?\n/).map(r=>r.trim()).filter(Boolean);
+  if(!regels.length){ m.textContent='Plak eerst een adviseurslijst.'; m.classList.add('fout'); return; }
+  bulkData = [];
+  const fouten = [];
+  regels.forEach((regel,i)=>{
+    const delen = regel.split(';').map(d=>d.trim());
+    const [naam, nr, email] = delen;
+    if(!valideerNr(nr||'')){ fouten.push('regel '+(i+1)); return; }
+    bulkData.push({ naam: naam||('Adviseur '+nr), nr, email: email||'', links: bouwLinks(nr) });
+  });
+  let html = '<table><thead><tr><th>Adviseur</th><th>Nr</th><th>Persoonlijke link &amp; delen</th></tr></thead><tbody>';
+  bulkData.forEach(a=>{
+    html += '<tr><td><b>'+esc(a.naam)+'</b>'+(a.email? '<br><span class="hint">'+esc(a.email)+'</span>':'')+'</td>'
+      + '<td><span class="badge">'+esc(a.nr)+'</span></td>'
+      + '<td>'+knopjes(a.links, a.naam, a.email)+'<div class="link">'+esc(a.links.persoonlijk)+'</div></td></tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('uitvoerBulk').innerHTML = bulkData.length ? html : '';
+  document.getElementById('knopCsv').disabled = !bulkData.length;
+  document.getElementById('knopAlles').disabled = !bulkData.length;
+  m.textContent = bulkData.length + ' adviseur(s) verwerkt' + (fouten.length? '; overgeslagen (ongeldig nummer): '+fouten.join(', ') : '.');
+  m.classList.add(fouten.length ? 'fout' : 'ok');
+}
+
+function csvVeld(v){ return '"' + String(v).replace(/"/g,'""') + '"'; }
+
+function downloadCsv(){
+  if(!bulkData.length) return;
+  const kop = ['Naam','Advisornummer','E-mail','Persoonlijke link','Facebook-deellink','LinkedIn-deellink','WhatsApp-deellink'];
+  const regels = [kop.join(';')];
+  bulkData.forEach(a=>{
+    regels.push([a.naam,a.nr,a.email,a.links.persoonlijk,a.links.facebook,a.links.linkedin,a.links.whatsapp].map(csvVeld).join(';'));
+  });
+  const blob = new Blob(['\uFEFF'+regels.join('\r\n')], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'nvhp-deellinks.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function kopieerAlles(){
+  if(!bulkData.length) return;
+  const tekst = bulkData.map(a=>a.naam+': '+a.links.persoonlijk).join('\n');
+  const m = document.getElementById('meldingBulk');
+  const klaar = ()=>{ m.className='melding ok'; m.textContent='Alle persoonlijke links gekopieerd naar het klembord.'; };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(tekst).then(klaar).catch(()=>fallbackKopie(tekst, klaar));
+  } else { fallbackKopie(tekst, klaar); }
+}
+</script>
+</body>
+</html>
