@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vind een hypothecair planner | NVHP</title>
+<meta name="description" content="Zoek een hypothecair planner (NVHP) op naam, kantoor of plaats en neem direct contact op.">
+<style>
+:root{--primair:#12284b;--primair-licht:#1d3f77;--accent:#c8a24a;--achtergrond:#f4f6f9;--tekst:#1a2333;--zacht:#5a6579;--lijn:#dde3ec}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.6;padding-bottom:60px}
+.kop{background:var(--primair);color:#fff;padding:34px 20px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+.kop .wrap{padding:0}
+.kop .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px}
+h1{font-size:1.6rem}
+.kop p{color:#c9d3e4;font-size:.92rem;margin-top:6px}
+.zoekbalk{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+.zoekbalk input{flex:1;min-width:220px;padding:12px 14px;border:none;border-radius:8px;font-size:.95rem;font-family:inherit}
+.zoekbalk input:focus{outline:3px solid var(--accent)}
+main{padding:22px 0}
+.teller{font-size:.82rem;color:var(--zacht);margin:0 20px 12px}
+@media(min-width:800px){.teller{margin-left:auto;margin-right:auto;max-width:760px;padding:0 20px}}
+.kaart{background:#fff;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;margin:0 20px 12px;display:flex;gap:14px;align-items:center;cursor:pointer}
+@media(min-width:800px){.kaart{margin-left:auto;margin-right:auto;max-width:760px}}
+.kaart:hover{border-color:var(--primair)}
+.avatar{width:56px;height:56px;border-radius:50%;flex:none;background:var(--primair);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.kaart .info{flex:1;min-width:0}
+.kaart .naam{font-weight:700;color:var(--primair);font-size:1.02rem}
+.kaart .sub{font-size:.85rem;color:var(--zacht)}
+.kaart .pijl{color:var(--zacht);font-size:1.2rem;flex:none}
+.detail{background:#fff;border:1px solid var(--lijn);border-radius:10px;padding:26px;margin:0 20px 14px}
+@media(min-width:800px){.detail{margin-left:auto;margin-right:auto;max-width:760px}}
+.detail .top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.detail .avatar{width:84px;height:84px;font-size:1.5rem}
+.detail h2{color:var(--primair);font-size:1.35rem}
+.detail .sub{color:var(--zacht);font-size:.92rem}
+.acties{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.knop{display:inline-block;background:var(--primair);color:#fff;text-decoration:none;font-size:.86rem;font-weight:600;padding:9px 16px;border-radius:7px;border:none;cursor:pointer;font-family:inherit}
+.knop.licht{background:#e8ecf3;color:var(--primair)}
+.terug{background:none;border:none;color:var(--primair);font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit;padding:0;margin-bottom:14px;display:inline-block;text-decoration:underline}
+.leeg{text-align:center;color:var(--zacht);padding:40px 20px;font-size:.92rem}
+.voet{font-size:.78rem;color:var(--zacht);font-style:italic;margin:26px 20px 0;border-top:1px solid var(--lijn);padding-top:14px}
+@media(min-width:800px){.voet{margin-left:auto;margin-right:auto;max-width:760px}}
+</style>
+</head>
+<body>
+<div class="kop"><div class="wrap">
+  <span class="lint">NVHP · plannerzoeker</span>
+  <h1>Vind een hypothecair planner</h1>
+  <p>Zoek op naam, kantoor of plaats en neem direct contact op.</p>
+  <div class="zoekbalk"><input type="text" id="zoek" placeholder="Bijv. Nijkerkerveen, Doetinchem of een naam…" autocomplete="off"></div>
+</div></div>
+<main>
+  <p class="teller" id="teller"></p>
+  <div id="lijst"></div>
+  <div id="detail" style="display:none"></div>
+  <p class="voet">De getoonde planners zijn aangesloten bij de NVHP en hebben toestemming gegeven voor vermelding van hun contactgegevens. Klopt er iets niet of wil je worden toegevoegd of verwijderd? Neem contact op met het NVHP-secretariaat.</p>
+</main>
+<script>
+"use strict";
+/* ================= PLANNERDATA =================
+   Bijwerken: pas onderstaand blok aan (zelfde formaat als in de artikelpagina's)
+   of vervang het door de data uit een nieuw gegenereerd artikelbestand.
+   Velden: n=naam, k=kantoor, p=plaats, t=telefoon, e=e-mail, w=profiel/website, f=foto-URL
+   ================================================ */
+var PLANNERS = {
+  "1001":{"n":"Jeroen Oversteegen","k":"Oversteegen.nl","p":"Nijkerkerveen","t":"06-21247257","e":"jeroen@oversteegen.nl","w":"https://www.linkedin.com/in/oversteegen/"},
+  "1002":{"n":"Addy Nobel","k":"Nobel Financieel Advies","p":"Doetinchem","t":"06-20761437","e":"addy.nobel@n-fa.nl","w":"https://www.nobelfinancieeladvies.nl/"}
+};
+/* Laatste artikel: wordt als knop getoond op de detailpagina, mét het nummer van de planner */
+var LAATSTE_ARTIKEL = { titel: "Verduurzamen: kijk verder dan je energierekening", pad: "artikelen/2026-08-verduurzaming.html" };
+/* =============================================== */
+
+function escT(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function initialen(naam){return naam.split(/\s+/).map(function(w){return w[0]||""}).join("").slice(0,2).toUpperCase()}
+function avatar(p){return p.f ? '<span class="avatar"><img src="'+escT(p.f)+'" alt="'+escT(p.n)+'"></span>' : '<span class="avatar">'+escT(initialen(p.n))+'</span>'}
+
+var lijstEl = document.getElementById('lijst');
+var detailEl = document.getElementById('detail');
+var tellerEl = document.getElementById('teller');
+var zoekEl = document.getElementById('zoek');
+
+function toonLijst(){
+  detailEl.style.display = 'none';
+  lijstEl.style.display = 'block';
+  var term = zoekEl.value.trim().toLowerCase();
+  var ids = Object.keys(PLANNERS).filter(function(id){
+    var p = PLANNERS[id];
+    if(!term) return true;
+    return [p.n, p.k, p.p].filter(Boolean).join(' ').toLowerCase().indexOf(term) !== -1;
+  }).sort(function(a,b){ return PLANNERS[a].n.localeCompare(PLANNERS[b].n, 'nl'); });
+  tellerEl.style.display = 'block';
+  tellerEl.textContent = ids.length + ' planner(s) gevonden';
+  if(!ids.length){
+    lijstEl.innerHTML = '<p class="leeg">Geen planners gevonden voor deze zoekterm.<br>Probeer een (deel van een) naam, kantoor of plaats.</p>';
+    return;
+  }
+  lijstEl.innerHTML = ids.map(function(id){
+    var p = PLANNERS[id];
+    var sub = [p.k, p.p].filter(Boolean).join(' · ');
+    return '<div class="kaart" onclick="toonDetail(\''+id+'\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')toonDetail(\''+id+'\')">'
+      + avatar(p)
+      + '<div class="info"><div class="naam">'+escT(p.n)+'</div>'
+      + (sub ? '<div class="sub">'+escT(sub)+'</div>' : '')
+      + '</div><span class="pijl">›</span></div>';
+  }).join('');
+}
+
+function toonDetail(id){
+  var p = PLANNERS[id];
+  if(!p){ toonLijst(); return; }
+  history.replaceState(null, '', location.pathname + '?advisor=' + encodeURIComponent(id));
+  lijstEl.style.display = 'none';
+  tellerEl.style.display = 'none';
+  detailEl.style.display = 'block';
+  var sub = [p.k, p.p].filter(Boolean).join(' · ');
+  var h = '<button class="terug" onclick="history.replaceState(null,\'\',location.pathname);toonLijst()">‹ Terug naar het overzicht</button>'
+    + '<div class="top">' + avatar(p)
+    + '<div><h2>'+escT(p.n)+'</h2>' + (sub ? '<div class="sub">'+escT(sub)+'</div>' : '') + '</div></div>'
+    + '<div class="acties">';
+  if(p.t) h += '<a class="knop" href="tel:'+escT(p.t.replace(/[^+\d]/g,""))+'">Bel '+escT(p.t)+'</a>';
+  if(p.e) h += '<a class="knop licht" href="mailto:'+escT(p.e)+'">Stuur een e-mail</a>';
+  if(p.w) h += '<a class="knop licht" href="'+escT(p.w)+'" target="_blank" rel="noopener">Bekijk profiel</a>';
+  h += '</div>';
+  if(LAATSTE_ARTIKEL && LAATSTE_ARTIKEL.pad){
+    h += '<div class="acties"><a class="knop licht" href="'+escT(LAATSTE_ARTIKEL.pad)+'?advisor='+encodeURIComponent(id)+'">Lees: '+escT(LAATSTE_ARTIKEL.titel)+'</a></div>';
+  }
+  detailEl.innerHTML = h;
+}
+
+zoekEl.addEventListener('input', toonLijst);
+
+/* Deep link: zoeker.html?advisor=1001 opent direct de detailpagina van die planner */
+var startId = new URLSearchParams(location.search).get('advisor');
+if(startId && PLANNERS[startId]){ toonDetail(startId); } else { toonLijst(); }
+</script>
+</body>
+</html>

@@ -8,8 +8,11 @@ met eigen contactblok (naam, kantoor, telefoonnummer, e-mail).
 
 ```
 index.html                          Artikeloverzicht (openbaar)
+zoeker.html                         Plannerzoeker: zoeken op naam/kantoor/plaats,
+                                    detailpagina per planner (?advisor=nummer)
 artikelen/
-  2026-08-verduurzaming.html        Voorbeeldartikel met fictieve planners (101, 102, 103)
+  2026-08-verduurzaming.html        Artikel "Verduurzamen: kijk verder dan je
+                                    energierekening" met planners 1001 en 1002
 beheer/
   generator.html                    Maakt van CSV + artikeltekst een nieuwe artikelpagina
   deellinks.html                    Maakt per planner persoonlijke links + Facebook/LinkedIn-deellinks + mails
@@ -33,9 +36,11 @@ beheer/
 - Overzicht: `https://<gebruikersnaam>.github.io/nvhp-artikelen/`
 - Artikel zonder afzender (toont zoeker-fallback):
   `…/artikelen/2026-08-verduurzaming.html`
-- Artikel mét afzenderblok (fictieve planner):
-  `…/artikelen/2026-08-verduurzaming.html?advisor=101`
-  (probeer ook `102`, `103` en een niet-bestaand nummer)
+- Artikel mét afzenderblok:
+  `…/artikelen/2026-08-verduurzaming.html?advisor=1001` (Jeroen)
+  of `?advisor=1002` (Addy); test ook een niet-bestaand nummer
+- Plannerzoeker: `…/zoeker.html` — zoek op "Doetinchem" of open direct
+  `…/zoeker.html?advisor=1001`
 - De overzichtspagina geeft `?advisor=…` automatisch door aan de artikellinks.
 
 ## Maandelijkse werkwijze
@@ -46,7 +51,9 @@ beheer/
    map `artikelen/` in de repository.
 4. Voeg op `index.html` een blok toe voor het nieuwe artikel (voorbeeldblok
    staat in het bestand; nieuwste bovenaan).
-5. Mail elke planner zijn persoonlijke link via `beheer/deellinks.html`
+5. Werk `zoeker.html` bij: het `PLANNERS`-blok bovenin bij ledenwijzigingen,
+   en de regel `LAATSTE_ARTIKEL` bij een nieuw artikel.
+6. Mail elke planner zijn persoonlijke link via `beheer/deellinks.html`
    (bulk-tab: `Naam;Nummer;E-mail` plakken → per planner "Mail adviseur";
    gemiste planner: knop "Herinnering").
 
