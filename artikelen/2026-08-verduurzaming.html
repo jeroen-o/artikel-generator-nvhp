@@ -84,8 +84,9 @@ if(deel){
   var basis = PAGINA_URL || (location.origin + location.pathname);
   var mijnUrl = basis + (advisorId ? "?advisor=" + encodeURIComponent(advisorId) : "");
   var enc = encodeURIComponent(mijnUrl);
-  deel.innerHTML += '<a class="knop licht" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u='+enc+'">Facebook</a>'
-    + '<a class="knop licht" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url='+enc+'">LinkedIn</a>'
+  var ic = function(b){return '<img src="../fotos/'+b+'.png" alt="" style="width:18px;height:18px;vertical-align:-3px;margin-right:6px">'};
+  deel.innerHTML += '<a class="knop licht" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u='+enc+'">'+ic('facebook')+'Facebook</a>'
+    + '<a class="knop licht" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url='+enc+'">'+ic('linkedin')+'LinkedIn</a>'
     + '<a class="knop licht" target="_blank" rel="noopener" href="https://wa.me/?text='+enc+'">WhatsApp</a>';
 }
 </script>
