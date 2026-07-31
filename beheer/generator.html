@@ -6,10 +6,10 @@
 <title>NVHP artikel-generator</title>
 <style>
   :root{
-    --primair:#12284b; --primair-licht:#1d3f77; --accent:#c8a24a;
-    --achtergrond:#f4f6f9; --paneel:#fff; --tekst:#1a2333; --tekst-zacht:#5a6579;
-    --lijn:#dde3ec; --ok:#1e7e46; --fout:#b3261e; --radius:10px;
-    --schaduw:0 1px 3px rgba(18,40,75,.08),0 8px 24px rgba(18,40,75,.06);
+    --primair:#1c3a6e; --primair-licht:#2a4d8f; --accent:#ae1932;
+    --achtergrond:#f6f9fc; --paneel:#fff; --tekst:#22304a; --tekst-zacht:#5d6b84;
+    --lijn:#d7e0ec; --ok:#1e7e46; --fout:#b3261e; --radius:10px;
+    --schaduw:0 1px 3px rgba(20,41,79,.08),0 8px 24px rgba(20,41,79,.06);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--achtergrond);color:var(--tekst);line-height:1.5;padding-bottom:60px}
@@ -17,7 +17,7 @@
   .wrap{max-width:980px;margin:0 auto}
   header h1{font-size:1.35rem;font-weight:600}
   header p{color:#c9d3e4;font-size:.9rem;margin-top:4px;max-width:680px}
-  header .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  header .lint{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
   main{padding:24px 20px}
   .kaart{background:var(--paneel);border:1px solid var(--lijn);border-radius:var(--radius);box-shadow:var(--schaduw);padding:22px;margin-bottom:20px}
   .kaart h2{font-size:1.02rem;color:var(--primair);margin-bottom:14px;display:flex;align-items:center;gap:8px}
@@ -283,12 +283,12 @@ function bouwArtikelHtml(a){
   + '<meta property="og:description" content="' + escHtml(a.intro) + '">\n'
   + (a.url ? '<meta property="og:url" content="' + escHtml(a.url) + '">\n' : '')
   + '<style>\n'
-  + ':root{--primair:#12284b;--accent:#c8a24a;--tekst:#1a2333;--zacht:#5a6579;--lijn:#dde3ec}\n'
+  + ':root{--primair:#1c3a6e;--accent:#ae1932;--tekst:#22304a;--zacht:#5d6b84;--lijn:#d7e0ec}\n'
   + '*{box-sizing:border-box;margin:0;padding:0}\n'
   + 'body{font-family:Georgia,"Times New Roman",serif;color:var(--tekst);line-height:1.65;background:#fff}\n'
   + '.kop{background:var(--primair);color:#fff;padding:34px 20px;font-family:"Segoe UI",system-ui,Arial,sans-serif}\n'
   + '.wrap{max-width:720px;margin:0 auto;padding:0 20px}\n'
-  + '.kop .wrap{padding:0}.kop .lint{display:inline-block;background:var(--accent);color:var(--primair);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px}\n'
+  + '.kop .wrap{padding:0}.kop .lint{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px}\n'
   + 'h1{font-size:1.7rem;line-height:1.25;font-weight:700}\n'
   + '.datum{color:#c9d3e4;font-size:.85rem;margin-top:8px}\n'
   + '.afzender{font-family:"Segoe UI",system-ui,Arial,sans-serif;border:1px solid var(--lijn);border-left:4px solid var(--accent);border-radius:8px;padding:16px 18px;margin:26px 0;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#f8f9fc}\n'
